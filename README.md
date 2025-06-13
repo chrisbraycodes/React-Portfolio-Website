@@ -1,6 +1,10 @@
-# Christopher Bray - React Developer Portfolio
+# Christopher Bray - Developer Portfolio using React
 
-Welcome to my React Developer Portfolio! This application showcases my front-end development skills, projects, and experience, with a focus on building interactive and responsive user interfaces using React.js.
+Welcome to my Developer Portfolio using React! This application showcases my front-end development skills, projects, and experience, with a focus on building interactive and responsive user interfaces using React.js.
+
+See it deployed here:
+
+https://www.chrisbraycodes.com
 
 ## Features
 
