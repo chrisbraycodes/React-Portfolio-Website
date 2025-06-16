@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import { About, Projects, Contact } from './components/Sections';
 import Skills from './components/Skills';
 import RootLayout from './components/Analytics.tsx';
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const App = () => {
     const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -27,6 +28,7 @@ const App = () => {
                     <GlobalStyles />
                     <Header toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
                     <main>
+                        <SpeedInsights />
                         <About />
                         <Skills />
                         <Projects />
