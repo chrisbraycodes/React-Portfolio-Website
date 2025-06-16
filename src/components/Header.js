@@ -152,7 +152,7 @@ const Header = () => {
       <GlobalStyles />
       <HeaderContainer>
       <IconContainer>
-        <Logo>Chris's Coding Portfolio</Logo>
+        <Logo>Chris' Coding Portfolio</Logo>
         </IconContainer>
         <IconContainer>
           <IconLink href="https://github.com/chrisbraycodes" target="_blank" rel="noopener noreferrer">
