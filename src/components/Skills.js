@@ -1,8 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FaReact, FaJsSquare, FaCss3Alt, FaGitAlt, FaAccessibleIcon } from 'react-icons/fa';
-import { SiRedux, SiTailwindcss, SiGraphql, SiTypescript, SiTestinglibrary } from 'react-icons/si';
-
+import {
+  FaReact,
+  FaJsSquare,
+  FaCss3Alt,
+  FaGitAlt,
+  FaAccessibleIcon,
+  FaPython,
+  FaDatabase
+} from 'react-icons/fa';
+import {
+  SiRedux,
+  SiTailwindcss,
+  SiGraphql,
+  SiTypescript,
+  SiTestinglibrary,
+  SiPandas,
+  SiScikitlearn,
+  SiPytorch,
+  SiFlask,
+  SiFirebase,
+  SiPostman,
+  SiGithub
+} from 'react-icons/si';
 // Container for the skills section
 const SkillsContainer = styled.section`
     padding: 2rem 1rem;
@@ -100,16 +120,29 @@ const Modal = styled.div`
 // Skills component with descriptions
 const Skills = () => {
     const skills = [
+        // 🧩 Frontend / UI
         { icon: <FaReact />, name: 'React.js', description: 'Build dynamic user interfaces with React.' },
         { icon: <SiRedux />, name: 'Redux', description: 'Manage complex application state effectively.' },
         { icon: <FaJsSquare />, name: 'JavaScript', description: 'Create interactive and responsive web applications.' },
         { icon: <SiTypescript />, name: 'TypeScript', description: 'Ensure type safety and maintainable code.' },
         { icon: <FaCss3Alt />, name: 'CSS', description: 'Design visually appealing user interfaces.' },
-        { icon: <SiTailwindcss />, name: 'TailwindCSS', description: 'Rapidly build custom designs.' },
-        { icon: <FaGitAlt />, name: 'Git', description: 'Version control and team collaboration.' },
+        { icon: <SiTailwindcss />, name: 'TailwindCSS', description: 'Rapidly build custom designs with utility classes.' },
         { icon: <SiGraphql />, name: 'GraphQL', description: 'Fetch data efficiently with precise queries.' },
-        { icon: <SiTestinglibrary />, name: 'Testing', description: 'Write tests to ensure application quality.' },
         { icon: <FaAccessibleIcon />, name: 'Accessibility', description: 'Create inclusive applications for all users.' },
+
+        // 🧠 Data Science & Machine Learning
+        { icon: <FaPython />, name: 'Python', description: 'Core language for ML, scripting, and backend APIs.' },
+        { icon: <SiPandas />, name: 'Pandas', description: 'Analyze and manipulate structured data.' },
+        { icon: <SiScikitlearn />, name: 'Scikit-learn', description: 'Build and evaluate traditional ML models.' },
+        { icon: <SiPytorch />, name: 'PyTorch', description: 'Develop deep learning models with flexibility.' },
+
+        // 🔧 Backend & Tools
+        { icon: <SiFlask />, name: 'Flask', description: 'Build lightweight, scalable backend APIs in Python.' },
+        { icon: <SiFirebase />, name: 'Firebase', description: 'Real-time database, authentication, and hosting.' },
+        { icon: <SiPostman />, name: 'Postman', description: 'Debug and test APIs with ease.' },
+        { icon: <FaGitAlt />, name: 'Git', description: 'Version control and team collaboration.' },
+        { icon: <SiGithub />, name: 'GitHub', description: 'Host and collaborate on code repositories.' },
+        { icon: <SiTestinglibrary />, name: 'Testing', description: 'Write and run automated tests for quality.' },
     ];
 
     return (

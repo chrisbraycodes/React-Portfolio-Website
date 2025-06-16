@@ -37,33 +37,42 @@ const ProjectsGrid = styled.div`
 const Projects = () => {
     const projectList = [
         {
-            title: 'Swift iOS Dating App - "Info Romantic"',
-            description: `My work on an extensive dating app was not just about coding; 
-            it was about understanding human connections and enhancing them through 
-            technology. Integrating Firebase for real-time updates and developing 
-            a dynamic matching algorithm were highlights of this project.`,
-            link: 'https://github.com/chrisbraycodes/InfoRomantic-iOS-Dating-App-Using-Swift',
-            imageSrc: '/infoRom small.jpg', // Image for the project card
+            title: 'Text Classification Pipeline (NLP, Flask, ML)',
+            description: `End-to-end machine learning pipeline using Python, spaCy, and logistic regression to classify product reviews. 
+            Built TF-IDF vectorizer, trained models, and deployed via Flask with 84% accuracy.`,
+            link: 'https://github.com/chrisbraycodes/nlp-product-review-classifier',
+            imageSrc: '/pipeline small.jpg',
         },
         {
-            title: 'Portfolio Website using React',
-            description: `This portfolio site showcases my coding journey and the projects 
-            I’ve worked on. Built with React and styled-components, it's fully responsive and 
-            features interactive elements.`,
-            link: 'https://github.com/chrisbraycodes/React-Portfolio-Website.git',
-            imageSrc: '/React Portfolio Small.jpg', // Image for the project card
+            title: 'MyReads – Book Tracking App (React)',
+            description: `Developed a React app for managing personal book collections using the Google Books API. 
+            Focused on component optimization, search latency reduction, and persistent state via localStorage.`,
+            link: 'https://github.com/chrisbraycodes/My-Reads',
+            imageSrc: '/my reads small.jpg',
         },
         {
-            title: 'React Native, iOS/Android/web Instagram Clone "instaClone"',
-            description: `The instaClone project was a personal challenge to
-             master cross-platform development. Here, I not only developed but
-              also managed the project from inception, learning the nuances of
-               deploying applications across Android, iOS, and web platforms.`,
+            title: 'InstaClone – Cross-Platform Instagram App (React Native + Firebase)',
+            description: `Built a mobile-first app supporting Android, iOS, and web using React Native and Firebase. 
+            Includes image upload, Firestore database, and responsive layouts.`,
             link: 'https://github.com/chrisbraycodes/instaClone-Instagram-Clone-using-React-Native-',
-            imageSrc: '/instaClone small.jpg', // Image for the project card
+            imageSrc: '/instaClone small.jpg',
         },
-        // Add more projects as needed
-    ];
+        {
+            title: 'InfoRomantic – iOS Dating App (Swift + Firebase)',
+            description: `Designed and developed a native iOS app for profile matching, using Firebase Auth, Firestore, and 
+            dynamic layout features in Swift. Achieved 92% setup completion across 1,000+ simulations.`,
+            link: 'https://github.com/chrisbraycodes/InfoRomantic-iOS-Dating-App-Using-Swift',
+            imageSrc: '/infoRom small.jpg',
+        },
+        {
+            title: 'chrisbraycodes.com – Portfolio Website (React)',
+            description: `Fully responsive portfolio site built using React and styled-components. 
+            Features animations, theme toggling, and clean layout optimized for hiring managers.`,
+            link: 'https://github.com/chrisbraycodes/React-Portfolio-Website',
+            imageSrc: '/React Portfolio Small.jpg',
+        },
+        ];
+
 
     return (
         <Section id="projects">
