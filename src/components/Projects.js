@@ -1,28 +1,54 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import Project from './Project';
+
+// Animations
+const fadeInUp = keyframes`
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
+
+// Removed unused slide animations
 
 // Styled container for the projects section
 const Section = styled.section`
     margin-bottom: 4rem;
     padding: 2rem;
     border: 1px solid ${({ theme }) => theme.border};
-    border-radius: 8px;
+    border-radius: 12px;
     background: ${({ theme }) => theme.background};
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
     word-wrap: break-word;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    }
 
     h2 {
-           font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: theme.text;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+        color: ${({ theme }) => theme.text};
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
         text-align: center;
+        animation: ${fadeInUp} 0.8s ease-out;
     }
 `;
 
@@ -39,6 +65,7 @@ const FeaturedSection = styled.div`
     display: flex;
     justify-content: center;
     margin-bottom: 3rem;
+    animation: ${fadeInUp} 0.8s ease-out 0.2s both;
 `;
 
 // Regular projects section
@@ -51,6 +78,7 @@ const RegularProjectsSection = styled.div`
 
 // Projects component displaying a list of projects
 const Projects = () => {
+
     const featuredProject = {
         title: 'Unfinished Work',
         description: `AI-powered social platform for creators. Currently iOS app with Android and web versions coming soon. 

@@ -1,11 +1,20 @@
 import styled, { keyframes } from 'styled-components';
 import { motion } from 'framer-motion';
 
-// Define a balloon-like floating animation
-const balloonAnimation = keyframes`
-    0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
-    50% { transform: translate(20px, -80px) scale(1); opacity: 1; }
-    100% { transform: translate(0, 0) scale(1); }
+// Define a simple fade and scale animation
+const fadeScaleAnimation = keyframes`
+    0% { 
+        transform: scale(0.3); 
+        opacity: 0; 
+    }
+    50% { 
+        transform: scale(1.1); 
+        opacity: 0.8; 
+    }
+    100% { 
+        transform: scale(1); 
+        opacity: 1; 
+    }
 `;
 
 // Styled component for the profile image
@@ -17,7 +26,8 @@ const ProfileImage = styled(motion.img)`
     border-radius: 50%; // Circular shape
     border: 3px solid ${({ theme }) => theme.border}; // Dynamic border based on theme
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Subtle shadow for depth
-    animation: ${balloonAnimation} 6s ease-out forwards; // Balloon animation
+    animation: ${fadeScaleAnimation} 1.5s ease-out forwards; // Simple fade and scale animation
+    transform-origin: center; // Ensure scaling happens from center
 `;
 
 // Main container for the About section

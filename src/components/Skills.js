@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 import {
   FaReact,
   FaJsSquare,
@@ -7,7 +7,10 @@ import {
   FaGitAlt,
   FaAccessibleIcon,
   FaPython,
-  FaDatabase
+  FaCode,
+  FaBrain,
+  FaServer,
+  FaUsers
 } from 'react-icons/fa';
 import {
   SiRedux,
@@ -23,139 +26,411 @@ import {
   SiPostman,
   SiGithub
 } from 'react-icons/si';
+
+// Animations
+const fadeInUp = keyframes`
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
+
+// Removed unused slideInLeft animation
+
+const progressFill = keyframes`
+    from {
+        width: 0%;
+    }
+    to {
+        width: var(--progress-width);
+    }
+`;
+
+const pulse = keyframes`
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+`;
+
 // Container for the skills section
 const SkillsContainer = styled.section`
-    padding: 2rem 1rem;
-    max-width: 800px;
-     border: 1px solid ${({ theme }) => theme.border}; // Dynamic border color
-    border-radius: 8px;
-    margin: 0 auto;
-    background: theme.body; // Matches current theme's body background
+    margin-bottom: 4rem;
+    padding: 2rem;
+    border: 1px solid ${({ theme }) => theme.border};
+    border-radius: 12px;
+    background: ${({ theme }) => theme.body};
+    color: ${({ theme }) => theme.text};
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    word-wrap: break-word;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: background 0.3s ease, color 0.3s ease;
 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    }
+
+    h2 {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+        color: ${({ theme }) => theme.text};
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+        text-align: center;
+        animation: ${fadeInUp} 0.8s ease-out;
+    }
 `;
 
-// Title styling
-const Title = styled.h2`
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: theme.text;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+// Title styling moved to SkillsContainer
+
+// Category tabs
+const CategoryTabs = styled.div`
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
 `;
 
-// Grid layout for skill cards
+const Tab = styled.button`
+    padding: 0.75rem 1.5rem;
+    border: 2px solid ${({ active, theme }) => active ? theme.linkHover : theme.border};
+    background: ${({ active, theme }) => active ? theme.linkHover : 'transparent'};
+    color: ${({ active, theme }) => active ? theme.body : theme.text};
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    animation: ${fadeInUp} 0.8s ease-out ${({ index }) => index * 0.1}s both;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+`;
+
+// Skills grid with animation
 const SkillsGrid = styled.div`
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 1rem;
-    justify-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
     margin-top: 2rem;
 `;
 
-// Skill card with hover interaction
+// Enhanced skill card with progress bar
 const SkillCard = styled.div`
+    background: ${({ theme }) => theme.bodySide};
+    color: ${({ theme }) => theme.text};
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: ${({ theme }) => theme.bodySide}; // Matches light/dark mode sidebar
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    animation: ${fadeInUp} 0.8s ease-out ${({ index }) => index * 0.1}s both;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    }
 
     &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
     }
+`;
 
+const SkillHeader = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+`;
+
+const SkillIcon = styled.div`
     svg {
         font-size: 2.5rem;
-        color: ${({ theme }) => theme.linkHover}; // Icon color based on theme
+        color: ${({ theme }) => theme.linkHover};
+        animation: ${pulse} 2s infinite;
     }
+`;
 
-    span {
-        margin-top: 0.5rem;
-        font-size: 1rem;
+const SkillInfo = styled.div`
+    flex: 1;
+    text-align: left;
+`;
+
+const SkillName = styled.h3`
+    font-size: 1.2rem;
         color: ${({ theme }) => theme.text};
+    margin: 0 0 0.25rem 0;
         font-weight: bold;
-    }
 `;
 
-// Tooltip/modal for additional information
-const Modal = styled.div`
-    position: absolute;
-    top: -120%; /* Positioned above the skill card */
-    left: 50%;
-    transform: translateX(-50%);
-    background: ${({ theme }) =>
-        theme.mode === 'light'
-            ? 'rgba(255, 255, 255, 0.95)'
-            : 'rgba(0, 0, 0, 0.95)'};
+const SkillLevel = styled.span`
+    font-size: 0.9rem;
     color: ${({ theme }) => theme.text};
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-    z-index: 10;
-    width: 250px;
-    text-align: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-
-    ${SkillCard}:hover & {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    p {
-        margin: 0;
-        font-size: 0.9rem;
-        line-height: 1.5;
-    }
+    opacity: 0.8;
 `;
 
-// Skills component with descriptions
+const ProgressContainer = styled.div`
+    width: 100%;
+    height: 8px;
+    background: ${({ theme }) => theme.border};
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+`;
+
+const ProgressBar = styled.div`
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-radius: 4px;
+    width: ${({ width }) => width}%;
+    animation: ${progressFill} 2s ease-out 0.5s both;
+    --progress-width: ${({ width }) => width}%;
+`;
+
+const SkillDescription = styled.p`
+        font-size: 0.9rem;
+    color: ${({ theme }) => theme.text};
+        line-height: 1.5;
+    margin: 0;
+    opacity: 0.9;
+`;
+
+// Skills component with enhanced features
 const Skills = () => {
+    const [activeCategory, setActiveCategory] = useState('all');
+
+    const skillCategories = {
+        all: { name: 'All Skills', icon: <FaCode /> },
+        frontend: { name: 'Frontend', icon: <FaCode /> },
+        backend: { name: 'Backend', icon: <FaServer /> },
+        ml: { name: 'ML/AI', icon: <FaBrain /> }
+    };
+
     const skills = [
-        // 🧩 Frontend / UI
-        { icon: <FaReact />, name: 'React.js', description: 'Build dynamic user interfaces with React.' },
-        { icon: <SiRedux />, name: 'Redux', description: 'Manage complex application state effectively.' },
-        { icon: <FaJsSquare />, name: 'JavaScript', description: 'Create interactive and responsive web applications.' },
-        { icon: <SiTypescript />, name: 'TypeScript', description: 'Ensure type safety and maintainable code.' },
-        { icon: <FaCss3Alt />, name: 'CSS', description: 'Design visually appealing user interfaces.' },
-        { icon: <SiTailwindcss />, name: 'TailwindCSS', description: 'Rapidly build custom designs with utility classes.' },
-        { icon: <SiGraphql />, name: 'GraphQL', description: 'Fetch data efficiently with precise queries.' },
-        { icon: <FaAccessibleIcon />, name: 'Accessibility', description: 'Create inclusive applications for all users.' },
+        // Frontend
+        { 
+            icon: <FaReact />, 
+            name: 'React.js', 
+            level: 'Expert',
+            proficiency: 95,
+            description: 'Building dynamic user interfaces with React hooks, context, and modern patterns.',
+            category: 'frontend'
+        },
+        { 
+            icon: <SiRedux />, 
+            name: 'Redux', 
+            level: 'Advanced',
+            proficiency: 85,
+            description: 'Managing complex application state with Redux Toolkit and middleware.',
+            category: 'frontend'
+        },
+        { 
+            icon: <FaJsSquare />, 
+            name: 'JavaScript', 
+            level: 'Expert',
+            proficiency: 95,
+            description: 'ES6+, async programming, DOM manipulation, and modern JavaScript features.',
+            category: 'frontend'
+        },
+        { 
+            icon: <SiTypescript />, 
+            name: 'TypeScript', 
+            level: 'Advanced',
+            proficiency: 80,
+            description: 'Type safety, interfaces, generics, and building maintainable applications.',
+            category: 'frontend'
+        },
+        { 
+            icon: <FaCss3Alt />, 
+            name: 'CSS', 
+            level: 'Expert',
+            proficiency: 90,
+            description: 'Flexbox, Grid, animations, responsive design, and CSS-in-JS solutions.',
+            category: 'frontend'
+        },
+        { 
+            icon: <SiTailwindcss />, 
+            name: 'TailwindCSS', 
+            level: 'Advanced',
+            proficiency: 85,
+            description: 'Utility-first CSS framework for rapid UI development.',
+            category: 'frontend'
+        },
+        { 
+            icon: <SiGraphql />, 
+            name: 'GraphQL', 
+            level: 'Intermediate',
+            proficiency: 70,
+            description: 'Efficient data fetching with precise queries and mutations.',
+            category: 'frontend'
+        },
+        { 
+            icon: <FaAccessibleIcon />, 
+            name: 'Accessibility', 
+            level: 'Advanced',
+            proficiency: 80,
+            description: 'WCAG guidelines, screen readers, and inclusive design practices.',
+            category: 'frontend'
+        },
 
-        // 🧠 Data Science & Machine Learning
-        { icon: <FaPython />, name: 'Python', description: 'Core language for ML, scripting, and backend APIs.' },
-        { icon: <SiPandas />, name: 'Pandas', description: 'Analyze and manipulate structured data.' },
-        { icon: <SiScikitlearn />, name: 'Scikit-learn', description: 'Build and evaluate traditional ML models.' },
-        { icon: <SiPytorch />, name: 'PyTorch', description: 'Develop deep learning models with flexibility.' },
+        // Backend
+        { 
+            icon: <SiFlask />, 
+            name: 'Flask', 
+            level: 'Advanced',
+            proficiency: 85,
+            description: 'Lightweight Python web framework for building scalable APIs.',
+            category: 'backend'
+        },
+        { 
+            icon: <SiFirebase />, 
+            name: 'Firebase', 
+            level: 'Advanced',
+            proficiency: 80,
+            description: 'Real-time database, authentication, and cloud hosting solutions.',
+            category: 'backend'
+        },
+        { 
+            icon: <FaGitAlt />, 
+            name: 'Git', 
+            level: 'Expert',
+            proficiency: 90,
+            description: 'Version control, branching strategies, and collaborative development.',
+            category: 'backend'
+        },
+        { 
+            icon: <SiGithub />, 
+            name: 'GitHub', 
+            level: 'Expert',
+            proficiency: 90,
+            description: 'Code hosting, CI/CD, project management, and open source collaboration.',
+            category: 'backend'
+        },
+        { 
+            icon: <SiPostman />, 
+            name: 'Postman', 
+            level: 'Advanced',
+            proficiency: 85,
+            description: 'API testing, documentation, and automated testing workflows.',
+            category: 'backend'
+        },
+        { 
+            icon: <SiTestinglibrary />, 
+            name: 'Testing', 
+            level: 'Advanced',
+            proficiency: 80,
+            description: 'Unit testing, integration testing, and test-driven development.',
+            category: 'backend'
+        },
 
-        // 🔧 Backend & Tools
-        { icon: <SiFlask />, name: 'Flask', description: 'Build lightweight, scalable backend APIs in Python.' },
-        { icon: <SiFirebase />, name: 'Firebase', description: 'Real-time database, authentication, and hosting.' },
-        { icon: <SiPostman />, name: 'Postman', description: 'Debug and test APIs with ease.' },
-        { icon: <FaGitAlt />, name: 'Git', description: 'Version control and team collaboration.' },
-        { icon: <SiGithub />, name: 'GitHub', description: 'Host and collaborate on code repositories.' },
-        { icon: <SiTestinglibrary />, name: 'Testing', description: 'Write and run automated tests for quality.' },
+        // ML/AI
+        { 
+            icon: <FaPython />, 
+            name: 'Python', 
+            level: 'Expert',
+            proficiency: 95,
+            description: 'Core language for ML, data analysis, and backend development.',
+            category: 'ml'
+        },
+        { 
+            icon: <SiPandas />, 
+            name: 'Pandas', 
+            level: 'Advanced',
+            proficiency: 85,
+            description: 'Data manipulation and analysis with powerful DataFrame operations.',
+            category: 'ml'
+        },
+        { 
+            icon: <SiScikitlearn />, 
+            name: 'Scikit-learn', 
+            level: 'Advanced',
+            proficiency: 80,
+            description: 'Traditional machine learning algorithms and model evaluation.',
+            category: 'ml'
+        },
+        { 
+            icon: <SiPytorch />, 
+            name: 'PyTorch', 
+            level: 'Intermediate',
+            proficiency: 70,
+            description: 'Deep learning framework for neural networks and research.',
+            category: 'ml'
+        },
+
+        // Project Management
+        { 
+            icon: <FaUsers />, 
+            name: 'Scrum', 
+            level: 'Advanced',
+            proficiency: 85,
+            description: 'Agile project management methodology with sprint planning, daily standups, and retrospectives.',
+            category: 'backend'
+        },
     ];
+
+    // Removed unused intersection observer
+
+    const filteredSkills = activeCategory === 'all' 
+        ? skills 
+        : skills.filter(skill => skill.category === activeCategory);
 
     return (
         <SkillsContainer id="skills">
-            <Title>My Skills</Title>
+            <h2>My Skills</h2>
+            
+            <CategoryTabs>
+                {Object.entries(skillCategories).map(([key, category], index) => (
+                    <Tab
+                        key={key}
+                        active={activeCategory === key}
+                        onClick={() => setActiveCategory(key)}
+                        index={index}
+                    >
+                        {category.icon} {category.name}
+                    </Tab>
+                ))}
+            </CategoryTabs>
+
             <SkillsGrid>
-                {skills.map((skill, index) => (
-                    <SkillCard key={index}>
+                {filteredSkills.map((skill, index) => (
+                    <SkillCard key={index} index={index}>
+                        <SkillHeader>
+                            <SkillIcon>
                         {skill.icon}
-                        <span>{skill.name}</span>
-                        <Modal>
-                            <p>{skill.description}</p>
-                        </Modal>
+                            </SkillIcon>
+                            <SkillInfo>
+                                <SkillName>{skill.name}</SkillName>
+                                <SkillLevel>{skill.level} • {skill.proficiency}%</SkillLevel>
+                            </SkillInfo>
+                        </SkillHeader>
+                        <ProgressContainer>
+                            <ProgressBar width={skill.proficiency} />
+                        </ProgressContainer>
+                        <SkillDescription>{skill.description}</SkillDescription>
                     </SkillCard>
                 ))}
             </SkillsGrid>

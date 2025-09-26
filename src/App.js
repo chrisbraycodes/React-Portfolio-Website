@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import { About, Projects, Contact } from './components/Sections';
 import Skills from './components/Skills';
+import ParticleBackground from './components/ParticleBackground';
 import RootLayout from './components/Analytics.tsx';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
@@ -24,19 +25,19 @@ const App = () => {
 
     return (
         <RootLayout>
-                <ThemeProvider theme={currentTheme}>
-                    <GlobalStyles />
-                    <Header toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
-                    <main>
-                        <SpeedInsights />
-                        <About />
-                        <Skills />
-                        <Projects />
-                        <Contact />
-                    </main>
-                    <Footer />
-                </ThemeProvider>
-            
+            <ThemeProvider theme={currentTheme}>
+                <GlobalStyles />
+                <ParticleBackground />
+                <Header toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
+                <main>
+                    <SpeedInsights />
+                    <About />
+                    <Projects />
+                    <Skills />
+                    <Contact />
+                </main>
+                <Footer />
+            </ThemeProvider>
         </RootLayout>
     );
 };
