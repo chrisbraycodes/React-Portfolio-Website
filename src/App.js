@@ -11,17 +11,41 @@ import RootLayout from './components/Analytics.tsx';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const App = () => {
-    const [isDarkMode, setIsDarkMode] = useState(() => {
+    // Get theme from URL parameters or localStorage
+    const getThemeFromURL = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const themeParam = urlParams.get('theme');
+        if (themeParam === 'dark' || themeParam === 'light') {
+            return themeParam === 'dark';
+        }
+        // Fallback to localStorage
         const savedMode = localStorage.getItem('isDarkMode');
         return savedMode === null ? true : savedMode === 'true';
-    });
+    };
+
+    const isDarkMode = getThemeFromURL();
+    const currentTheme = isDarkMode ? darkTheme : lightTheme;
 
     useEffect(() => {
+        // Save current theme to localStorage
         localStorage.setItem('isDarkMode', isDarkMode);
+        
+        // Clean up URL parameters after theme is set
+        const url = new URL(window.location);
+        if (url.searchParams.has('theme')) {
+            url.searchParams.delete('theme');
+            window.history.replaceState({}, '', url.toString());
+        }
     }, [isDarkMode]);
 
-    const toggleTheme = () => setIsDarkMode((prev) => !prev);
-    const currentTheme = isDarkMode ? darkTheme : lightTheme;
+    const toggleTheme = () => {
+        const newTheme = isDarkMode ? 'light' : 'dark';
+        
+        // Navigate to the same page with theme parameter
+        const url = new URL(window.location);
+        url.searchParams.set('theme', newTheme);
+        window.location.href = url.toString();
+    };
 
     return (
         <RootLayout>

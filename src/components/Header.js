@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled, { ThemeProvider, keyframes } from 'styled-components';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import GlobalStyles from '../styles/GlobalStyles';
@@ -133,18 +133,8 @@ const Nav = styled.nav`
   }
 `;
 
-const Header = () => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const savedMode = localStorage.getItem('isDarkMode');
-    return savedMode === null ? true : savedMode === 'true';
-  });
+const Header = ({ toggleTheme, isDarkMode }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    localStorage.setItem('isDarkMode', isDarkMode);
-  }, [isDarkMode]);
-
-  const toggleTheme = () => setIsDarkMode((prevMode) => !prevMode);
   const currentTheme = isDarkMode ? darkTheme : lightTheme;
 
   return (

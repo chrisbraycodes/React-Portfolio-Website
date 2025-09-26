@@ -65,7 +65,7 @@ const SkillsContainer = styled.section`
     padding: 2rem;
     border: 1px solid ${({ theme }) => theme.border};
     border-radius: 12px;
-    background: ${({ theme }) => theme.body};
+    background: ${({ theme }) => theme.background};
     color: ${({ theme }) => theme.text};
     max-width: 1000px;
     margin-left: auto;
@@ -74,7 +74,7 @@ const SkillsContainer = styled.section`
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     position: relative;
-    transition: background 0.3s ease, color 0.3s ease;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 
     &::before {
         content: '';
@@ -139,7 +139,7 @@ const SkillCard = styled.div`
     padding: 1.5rem;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    transition: all 0.3s ease, background 0.3s ease, color 0.3s ease;
     position: relative;
     overflow: hidden;
     animation: ${fadeInUp} 0.8s ease-out ${({ index }) => index * 0.1}s both;
@@ -182,9 +182,9 @@ const SkillInfo = styled.div`
 
 const SkillName = styled.h3`
     font-size: 1.2rem;
-        color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.text};
     margin: 0 0 0.25rem 0;
-        font-weight: bold;
+    font-weight: bold;
 `;
 
 const SkillLevel = styled.span`
@@ -212,9 +212,9 @@ const ProgressBar = styled.div`
 `;
 
 const SkillDescription = styled.p`
-        font-size: 0.9rem;
+    font-size: 0.9rem;
     color: ${({ theme }) => theme.text};
-        line-height: 1.5;
+    line-height: 1.5;
     margin: 0;
     opacity: 0.9;
 `;
@@ -222,6 +222,7 @@ const SkillDescription = styled.p`
 // Skills component with enhanced features
 const Skills = () => {
     const [activeCategory, setActiveCategory] = useState('all');
+    
 
     const skillCategories = {
         all: { name: 'All Skills', icon: <FaCode /> },
