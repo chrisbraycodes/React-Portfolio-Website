@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import Project from './Project';
 
 // Styled container for the projects section
@@ -25,8 +26,23 @@ const Section = styled.section`
     }
 `;
 
-// Grid layout for displaying project cards
-const ProjectsGrid = styled.div`
+// Grid layout for displaying project cards (kept for potential future use)
+// const ProjectsGrid = styled.div`
+//     display: grid;
+//     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+//     gap: 1.5rem;
+//     justify-items: center;
+// `;
+
+// Featured project section
+const FeaturedSection = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+`;
+
+// Regular projects section
+const RegularProjectsSection = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
@@ -35,13 +51,25 @@ const ProjectsGrid = styled.div`
 
 // Projects component displaying a list of projects
 const Projects = () => {
-    const projectList = [
+    const featuredProject = {
+        title: 'Unfinished Work',
+        description: `AI-powered social platform for creators. Currently iOS app with Android and web versions coming soon. 
+        Web platform serves as landing page with support docs and beta requests.`,
+        link: 'https://unfinished-work.com',
+        imageSrc: '/unfinished-work-featured.png',
+        buttonText: 'Visit Website',
+        icon: FaExternalLinkAlt,
+    };
+
+    const regularProjects = [
         {
             title: 'Text Classification Pipeline (NLP, Flask, ML)',
             description: `End-to-end machine learning pipeline using Python, spaCy, and logistic regression to classify product reviews. 
             Built TF-IDF vectorizer, trained models, and deployed via Flask with 84% accuracy.`,
             link: 'https://github.com/chrisbraycodes/nlp-product-review-classifier',
             imageSrc: '/pipeline small.jpg',
+            liveDemoLink: 'https://nbviewer.org/github/chrisbraycodes/nlp-product-review-classifier/blob/master/starter/starter.ipynb',
+            liveDemoText: 'View Notebook',
         },
         {
             title: 'MyReads – Book Tracking App (React)',
@@ -49,8 +77,8 @@ const Projects = () => {
             Focused on component optimization, search latency reduction, and persistent state via localStorage.`,
             link: 'https://github.com/chrisbraycodes/My-Reads',
             imageSrc: '/my reads small.jpg',
+            liveDemoLink: 'https://my-reads-blush.vercel.app/',
         },
-
         {
             title: 'InfoRomantic – iOS Dating App (Swift + Firebase)',
             description: `Designed and developed a native iOS app for profile matching, using Firebase Auth, Firestore, and 
@@ -65,23 +93,37 @@ const Projects = () => {
             link: 'https://github.com/chrisbraycodes/React-Portfolio-Website',
             imageSrc: '/React Portfolio Small.jpg',
         },
-        ];
-
+    ];
 
     return (
         <Section id="projects">
             <h2>Projects</h2>
-            <ProjectsGrid>
-                {projectList.map((project, index) => (
+            <FeaturedSection>
+                <Project
+                    title={featuredProject.title}
+                    description={featuredProject.description}
+                    link={featuredProject.link}
+                    imageSrc={featuredProject.imageSrc}
+                    buttonText={featuredProject.buttonText}
+                    icon={featuredProject.icon}
+                    isFeatured={true}
+                />
+            </FeaturedSection>
+            <RegularProjectsSection>
+                {regularProjects.map((project, index) => (
                     <Project
-                        key={index} // Unique key for each project card
-                        title={project.title} // Project title
-                        description={project.description} // Brief project description
-                        link={project.link} // Link to the project's GitHub repository
-                        imageSrc={project.imageSrc} // Thumbnail image for the project
+                        key={index}
+                        title={project.title}
+                        description={project.description}
+                        link={project.link}
+                        imageSrc={project.imageSrc}
+                        buttonText={project.buttonText}
+                        icon={project.icon}
+                        liveDemoLink={project.liveDemoLink}
+                        liveDemoText={project.liveDemoText}
                     />
                 ))}
-            </ProjectsGrid>
+            </RegularProjectsSection>
         </Section>
     );
 };
