@@ -82,8 +82,7 @@ const Projects = () => {
 
     const featuredProject = {
         title: 'Unfinished Work',
-        description: `AI-powered social platform for creators. Currently iOS app with Android and web versions coming soon. 
-        Web platform serves as landing page with support docs and beta requests.`,
+        description: `AI-powered project management platform for creators and builders. Features AI coaching, project critique, research suggestions, health score analysis, risk assessment, timeline prediction, and priority matrix. Built with React Native/Expo, Firebase backend, and OpenAI API integration. Includes biometric authentication, social features, and subscription management. Currently iOS app with Android and web versions in development.`,
         link: 'https://unfinished-work.com',
         imageSrc: '/unfinished-work-featured.png',
         buttonText: 'Visit Website',
