@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styled, { ThemeProvider, keyframes } from 'styled-components';
-import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaFilePdf } from 'react-icons/fa';
 import GlobalStyles from '../styles/GlobalStyles';
 import { lightTheme, darkTheme } from '../theme';
+import ResumeModal from './ResumeModal';
 
 // Animation for header background
 const fibonacciLight = keyframes`
@@ -96,6 +97,30 @@ const ThemeToggle = styled.button`
     }
 `;
 
+const ResumeButton = styled.button`
+    background: ${({ theme }) => theme.bodySide};
+    color: ${({ theme }) => theme.text};
+    border: 1px solid ${({ theme }) => theme.border};
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+
+    &:hover {
+        background: ${({ theme }) => theme.linkHover};
+        color: ${({ theme }) => theme.body};
+        transform: translateY(-1px);
+    }
+
+    svg {
+        font-size: 1rem;
+    }
+`;
+
 const HamburgerButton = styled.button`
   border: none;
   background: none;
@@ -135,6 +160,7 @@ const Nav = styled.nav`
 
 const Header = ({ toggleTheme, isDarkMode }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [resumeModalOpen, setResumeModalOpen] = useState(false);
   const currentTheme = isDarkMode ? darkTheme : lightTheme;
 
   return (
@@ -142,7 +168,7 @@ const Header = ({ toggleTheme, isDarkMode }) => {
       <GlobalStyles />
       <HeaderContainer>
       <IconContainer>
-        <Logo>Chris' Coding Portfolio</Logo>
+        <Logo>Chris Bray - Developer Portfolio</Logo>
         </IconContainer>
         <IconContainer>
           <IconLink href="https://github.com/chrisbraycodes" target="_blank" rel="noopener noreferrer">
@@ -151,6 +177,10 @@ const Header = ({ toggleTheme, isDarkMode }) => {
           <IconLink href="https://linkedin.com/in/chrisbraycodes" target="_blank" rel="noopener noreferrer">
             <FaLinkedin />
           </IconLink>
+          <ResumeButton onClick={() => setResumeModalOpen(true)}>
+            <FaFilePdf />
+            Resume
+          </ResumeButton>
           <ThemeToggle onClick={toggleTheme}>
             {isDarkMode ? 'Day Mode' : 'Night Mode'}
           </ThemeToggle>
@@ -162,6 +192,11 @@ const Header = ({ toggleTheme, isDarkMode }) => {
           <a href="#contact">Contact</a>
         </Nav>
       </HeaderContainer>
+      <ResumeModal 
+        isOpen={resumeModalOpen} 
+        onClose={() => setResumeModalOpen(false)} 
+        theme={currentTheme}
+      />
     </ThemeProvider>
   );
 };

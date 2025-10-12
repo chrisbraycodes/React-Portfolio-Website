@@ -10,6 +10,6 @@ test('renders portfolio header', () => {
   render(<App />);
   
   // Find the header element and assert it is in the document
-  const headerElement = screen.getByText(/Christopher's React Portfolio/i);
+  const headerElement = screen.getByText(/Chris Bray - Developer Portfolio/i);
   expect(headerElement).toBeInTheDocument(); // Assert the element is in the DOM
 });

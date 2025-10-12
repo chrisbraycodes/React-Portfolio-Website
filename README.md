@@ -1,6 +1,6 @@
-# Christopher Bray - React Developer Portfolio
+# Christopher Bray - Developer Portfolio
 
-Welcome to my React Developer Portfolio! This application showcases my front-end development skills, projects, and experience, with a focus on building interactive and responsive user interfaces using React.js.
+Welcome to my Developer Portfolio! This application showcases my full-stack development skills, projects, and experience, with a focus on building interactive and responsive web applications.
 
 ## Features
 
@@ -12,15 +12,15 @@ Welcome to my React Developer Portfolio! This application showcases my front-end
 
 ## Technologies Used
 
-- **React.js**
-- **Styled-Components**
-- **React Icons**
-- **Framer Motion**
-- **Jest/React Testing Library (for testing)**
-- **EmailJS**
+- **React.js** - Frontend framework
+- **Styled-Components** - CSS-in-JS styling
+- **React Icons** - Icon library
+- **Framer Motion** - Animation library
+- **Jest/React Testing Library** - Testing framework
+- **EmailJS** - Email service integration
 
 ## Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/chrisbraycodes/react-portfolio.git
+   git clone https://github.com/chrisbraycodes/React-Portfolio-Website.git

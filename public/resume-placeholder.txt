@@ -1,0 +1,11 @@
+RESUME PLACEHOLDER
+
+This is a placeholder file. Please replace this with your actual resume PDF file named "resume.pdf" in the public folder.
+
+Instructions:
+1. Save your resume as a PDF file
+2. Name it "resume.pdf" 
+3. Place it in the public folder of this project
+4. The resume modal will then display and allow download of your actual resume
+
+The modal is already set up and ready to work with your PDF file!

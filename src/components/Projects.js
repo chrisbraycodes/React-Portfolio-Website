@@ -115,7 +115,7 @@ const Projects = () => {
             imageSrc: '/infoRom small.jpg',
         },
         {
-            title: 'chrisbraycodes.com – Portfolio Website (React)',
+            title: 'chrisbraycodes.com – Portfolio Website',
             description: `Fully responsive portfolio site built using React and styled-components. 
             Features animations, theme toggling, and clean layout optimized for hiring managers.`,
             link: 'https://github.com/chrisbraycodes/React-Portfolio-Website',
