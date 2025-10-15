@@ -81,7 +81,7 @@ const About = () => (
         transition={{ duration: 0.5 }} // Smooth transition
     >
         <Title>About Me</Title>
-        <ProfileImage src="/circle.png" alt="Christopher Bray's Profile Picture" />
+        <ProfileImage src="/profileImage.png" alt="Christopher Bray's Profile Picture" />
         <Paragraph
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
