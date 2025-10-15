@@ -51,13 +51,40 @@ const HeaderContainer = styled.header`
 
 
 
+const LogoContainer = styled.div`
+  display: inline-block;
+  background: ${({ theme }) => theme.bodySide};
+  padding: 0.5rem 0.4rem 0.5rem 1rem;  // Top, right (much smaller), bottom, left padding
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-right: 2rem;
+  max-width: calc(100vw - 200px);  // Prevent overflow, leave space for other elements
+  position: relative;
+
+  @media (max-width: 768px) {
+    margin-right: 0;
+    padding: 0.4rem 0.3rem 0.4rem 0.8rem;
+    max-width: calc(100vw - 150px);
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.3rem 0.25rem 0.3rem 0.6rem;
+    max-width: calc(100vw - 120px);
+  }
+`;
+
 const Logo = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
-  margin-right: 2rem;  // Add space between logo and icons
+  line-height: 1.2;
+  text-align: left;
 
   @media (max-width: 768px) {
-    margin-right: 0;  // Remove right margin on mobile
+    font-size: 1.3rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.1rem;
   }
 `;
 
@@ -233,9 +260,9 @@ const Header = ({ toggleTheme, isDarkMode }) => {
     <ThemeProvider theme={currentTheme}>
       <GlobalStyles />
       <HeaderContainer>
-      <IconContainer>
-        <Logo>Chris Bray - Developer Portfolio</Logo>
-        </IconContainer>
+        <LogoContainer>
+          <Logo>Chris Bray - Developer Portfolio</Logo>
+        </LogoContainer>
         <IconContainer>
           <IconLink href="https://github.com/chrisbraycodes" target="_blank" rel="noopener noreferrer">
             <FaGithub />
