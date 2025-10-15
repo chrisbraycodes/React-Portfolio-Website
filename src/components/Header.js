@@ -32,8 +32,14 @@ const HeaderContainer = styled.header`
   @media (max-width: 768px) {
     flex-direction: row;  // Keep layout as row for mobile
     justify-content: space-between;  // Keep left and right alignment
-    padding: 1rem;  // Remove extra padding on mobile
+    padding: 0.75rem 1rem;  // Reduce padding on mobile
     width: 100%;  // Make sure it's full width
+    min-height: 60px;  // Ensure consistent height
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.5rem 0.75rem;  // Even smaller padding on very small screens
+    min-height: 55px;  // Slightly smaller height
   }
 `;
 
@@ -68,6 +74,13 @@ const IconContainer = styled.div`
   @media (max-width: 768px) {
     margin-top: 0;  // Remove margin-top on mobile
     padding: 0.5rem;  // Adjust padding for smaller screens
+    gap: 0.5rem;  // Reduce gap on mobile
+    flex-wrap: wrap;  // Allow wrapping on very small screens
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.25rem;  // Even smaller gap on very small screens
+    padding: 0.25rem 0.5rem;  // Smaller padding
   }
 `;
 
@@ -90,10 +103,21 @@ const ThemeToggle = styled.button`
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.3s ease;
+    white-space: nowrap;
 
     &:hover {
         background: ${({ theme }) => theme.linkHover};
         color: ${({ theme }) => theme.body};
+    }
+
+    @media (max-width: 768px) {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
     }
 `;
 
@@ -109,6 +133,7 @@ const ResumeButton = styled.button`
     align-items: center;
     gap: 0.5rem;
     font-size: 0.9rem;
+    white-space: nowrap;
 
     &:hover {
         background: ${({ theme }) => theme.linkHover};
@@ -118,6 +143,22 @@ const ResumeButton = styled.button`
 
     svg {
         font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        gap: 0.3rem;
+    }
+
+    @media (max-width: 480px) {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
+        gap: 0.25rem;
+        
+        span {
+            display: none;  // Hide text on very small screens, show only icon
+        }
     }
 `;
 
@@ -179,7 +220,7 @@ const Header = ({ toggleTheme, isDarkMode }) => {
           </IconLink>
           <ResumeButton onClick={() => setResumeModalOpen(true)}>
             <FaFilePdf />
-            Resume
+            <span>Resume</span>
           </ResumeButton>
           <ThemeToggle onClick={toggleTheme}>
             {isDarkMode ? 'Day Mode' : 'Night Mode'}
