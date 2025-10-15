@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled, { ThemeProvider, keyframes } from 'styled-components';
-import { FaGithub, FaLinkedin, FaFilePdf } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaUserTie } from 'react-icons/fa';
 import GlobalStyles from '../styles/GlobalStyles';
 import { lightTheme, darkTheme } from '../theme';
 import ResumeModal from './ResumeModal';
@@ -122,9 +122,9 @@ const ThemeToggle = styled.button`
 `;
 
 const ResumeButton = styled.button`
-    background: ${({ theme }) => theme.bodySide};
+    background: linear-gradient(135deg, ${({ theme }) => theme.bodySide} 0%, ${({ theme }) => theme.linkHover}20 100%);
     color: ${({ theme }) => theme.text};
-    border: 1px solid ${({ theme }) => theme.border};
+    border: 1px solid ${({ theme }) => theme.linkHover};
     padding: 0.5rem 1rem;
     border-radius: 5px;
     cursor: pointer;
@@ -134,11 +134,30 @@ const ResumeButton = styled.button`
     gap: 0.5rem;
     font-size: 0.9rem;
     white-space: nowrap;
+    position: relative;
+    font-weight: 500;
 
     &:hover {
         background: ${({ theme }) => theme.linkHover};
         color: ${({ theme }) => theme.body};
         transform: translateY(-1px);
+    }
+
+    &:hover::after {
+        content: 'View Resume';
+        position: absolute;
+        bottom: -35px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: ${({ theme }) => theme.bodySide};
+        color: ${({ theme }) => theme.text};
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        border: 1px solid ${({ theme }) => theme.border};
     }
 
     svg {
@@ -158,6 +177,12 @@ const ResumeButton = styled.button`
         
         span {
             display: none;  // Hide text on very small screens, show only icon
+        }
+
+        &:hover::after {
+            content: 'Resume';
+            font-size: 0.7rem;
+            bottom: -30px;
         }
     }
 `;
@@ -218,8 +243,8 @@ const Header = ({ toggleTheme, isDarkMode }) => {
           <IconLink href="https://linkedin.com/in/chrisbraycodes" target="_blank" rel="noopener noreferrer">
             <FaLinkedin />
           </IconLink>
-          <ResumeButton onClick={() => setResumeModalOpen(true)}>
-            <FaFilePdf />
+          <ResumeButton onClick={() => setResumeModalOpen(true)} title="View Resume">
+            <FaUserTie />
             <span>Resume</span>
           </ResumeButton>
           <ThemeToggle onClick={toggleTheme}>

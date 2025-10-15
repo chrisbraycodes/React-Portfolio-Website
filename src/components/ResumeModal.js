@@ -163,13 +163,28 @@ const ResumeModal = ({ isOpen, onClose, theme }) => {
   const [pdfError, setPdfError] = useState(false);
 
   const handleDownload = () => {
-    // Create a temporary link element to trigger download
-    const link = document.createElement('a');
-    link.href = '/resume.pdf';
-    link.download = 'Chris_Bray_Resume.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Check if we're on iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    
+    if (isIOS) {
+      // On iOS, open in new tab for download
+      const link = document.createElement('a');
+      link.href = '/resume.pdf';
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      // For other devices, use standard download
+      const link = document.createElement('a');
+      link.href = '/resume.pdf';
+      link.download = 'Chris_Bray_Resume.pdf';
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   };
 
   const handleViewInNewTab = () => {
@@ -215,7 +230,7 @@ const ResumeModal = ({ isOpen, onClose, theme }) => {
                   </ActionButton>
                   <ActionButton theme={theme} onClick={handleDownload}>
                     <FaDownload />
-                    Download PDF
+                    {/iPad|iPhone|iPod/.test(navigator.userAgent) ? 'Open PDF' : 'Download PDF'}
                   </ActionButton>
                 </ActionButtons>
               </FallbackMessage>
@@ -229,7 +244,7 @@ const ResumeModal = ({ isOpen, onClose, theme }) => {
             </ActionButton>
             <ActionButton theme={theme} onClick={handleDownload}>
               <FaDownload />
-              Download PDF
+              {/iPad|iPhone|iPod/.test(navigator.userAgent) ? 'Open PDF' : 'Download PDF'}
             </ActionButton>
           </ActionButtons>
         </ModalContent>
