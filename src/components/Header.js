@@ -205,6 +205,14 @@ const ResumeButton = styled.button`
         font-size: 1rem;
     }
 
+    .resume-text {
+        display: inline;
+    }
+    
+    .resume-text-short {
+        display: none;
+    }
+
     @media (max-width: 1200px) {
         padding: 0.4rem 0.8rem;
         font-size: 0.85rem;
@@ -215,6 +223,14 @@ const ResumeButton = styled.button`
         padding: 0.4rem 0.8rem;
         font-size: 0.8rem;
         gap: 0.3rem;
+        
+        .resume-text {
+            display: none;
+        }
+        
+        .resume-text-short {
+            display: inline;
+        }
     }
 
     @media (max-width: 480px) {
@@ -222,8 +238,12 @@ const ResumeButton = styled.button`
         font-size: 0.75rem;
         gap: 0.25rem;
         
-        span {
-            display: none;  // Hide text on very small screens, show only icon
+        .resume-text {
+            display: none;
+        }
+        
+        .resume-text-short {
+            display: inline;
         }
 
         &:hover::after {
@@ -292,7 +312,8 @@ const Header = ({ toggleTheme, isDarkMode }) => {
           </IconLink>
           <ResumeButton onClick={() => setResumeModalOpen(true)} title="View Resume">
             <FaFilePdf />
-            <span>RES</span>
+            <span className="resume-text">Resume</span>
+            <span className="resume-text-short">RES</span>
           </ResumeButton>
           <ThemeToggle onClick={toggleTheme}>
             {isDarkMode ? 'Day Mode' : 'Night Mode'}
