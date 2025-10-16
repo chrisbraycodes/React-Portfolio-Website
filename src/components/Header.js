@@ -84,12 +84,36 @@ const Logo = styled.div`
   line-height: 1.2;
   text-align: left;
 
+  .logo-text-full {
+    display: inline;
+  }
+  
+  .logo-text-short {
+    display: none;
+  }
+
   @media (max-width: 768px) {
     font-size: 1.3rem;
+    
+    .logo-text-full {
+      display: none;
+    }
+    
+    .logo-text-short {
+      display: inline;
+    }
   }
 
   @media (max-width: 480px) {
     font-size: 1.1rem;
+    
+    .logo-text-full {
+      display: none;
+    }
+    
+    .logo-text-short {
+      display: inline;
+    }
   }
 `;
 
@@ -300,9 +324,12 @@ const Header = ({ toggleTheme, isDarkMode }) => {
     <ThemeProvider theme={currentTheme}>
       <GlobalStyles />
       <HeaderContainer>
-        <LogoContainer>
-          <Logo>Chris Bray - Developer Portfolio</Logo>
-        </LogoContainer>
+            <LogoContainer>
+              <Logo>
+                <span className="logo-text-full">Chris Bray - Developer Portfolio</span>
+                <span className="logo-text-short">Chris Bray - Dev Portfolio</span>
+              </Logo>
+            </LogoContainer>
         <IconContainer>
           <IconLink href="https://github.com/chrisbraycodes" target="_blank" rel="noopener noreferrer">
             <FaGithub />
