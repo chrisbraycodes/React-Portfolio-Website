@@ -10,7 +10,9 @@ import {
   FaCode,
   FaBrain,
   FaServer,
-  FaUsers
+  FaUsers,
+  FaMobile,
+  FaRobot
 } from 'react-icons/fa';
 import {
   SiRedux,
@@ -24,7 +26,12 @@ import {
   SiFlask,
   SiFirebase,
   SiPostman,
-  SiGithub
+  SiGithub,
+  SiReact,
+  SiExpo,
+  SiOpenai,
+  SiNodedotjs,
+  SiStyledcomponents
 } from 'react-icons/si';
 
 // Animations
@@ -227,7 +234,9 @@ const Skills = () => {
     const skillCategories = {
         all: { name: 'All Skills', icon: <FaCode /> },
         frontend: { name: 'Frontend', icon: <FaCode /> },
+        mobile: { name: 'Mobile', icon: <FaMobile /> },
         backend: { name: 'Backend', icon: <FaServer /> },
+        ai: { name: 'AI Integration', icon: <FaRobot /> },
         ml: { name: 'ML/AI', icon: <FaBrain /> }
     };
 
@@ -240,6 +249,22 @@ const Skills = () => {
             proficiency: 95,
             description: 'Building dynamic user interfaces with React hooks, context, and modern patterns.',
             category: 'frontend'
+        },
+        { 
+            icon: <SiReact />, 
+            name: 'React Native', 
+            level: 'Expert',
+            proficiency: 90,
+            description: 'Cross-platform mobile development with React Native, Expo, and native modules.',
+            category: 'mobile'
+        },
+        { 
+            icon: <SiExpo />, 
+            name: 'Expo', 
+            level: 'Advanced',
+            proficiency: 85,
+            description: 'Rapid mobile app development with Expo SDK, OTA updates, and deployment.',
+            category: 'mobile'
         },
         { 
             icon: <SiRedux />, 
@@ -297,8 +322,24 @@ const Skills = () => {
             description: 'WCAG guidelines, screen readers, and inclusive design practices.',
             category: 'frontend'
         },
+        { 
+            icon: <SiStyledcomponents />, 
+            name: 'Styled Components', 
+            level: 'Advanced',
+            proficiency: 85,
+            description: 'CSS-in-JS styling with component-based design and theme systems.',
+            category: 'frontend'
+        },
 
         // Backend
+        { 
+            icon: <SiNodedotjs />, 
+            name: 'Node.js', 
+            level: 'Advanced',
+            proficiency: 80,
+            description: 'Server-side JavaScript runtime for building scalable backend applications.',
+            category: 'backend'
+        },
         { 
             icon: <SiFlask />, 
             name: 'Flask', 
@@ -346,6 +387,16 @@ const Skills = () => {
             proficiency: 80,
             description: 'Unit testing, integration testing, and test-driven development.',
             category: 'backend'
+        },
+
+        // AI Integration
+        { 
+            icon: <SiOpenai />, 
+            name: 'OpenAI API', 
+            level: 'Expert',
+            proficiency: 90,
+            description: 'GPT-4o and DALL-E 3 integration for AI-powered applications and visual generation.',
+            category: 'ai'
         },
 
         // ML/AI

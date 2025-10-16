@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { FaTimes, FaDownload, FaEye } from 'react-icons/fa';
+import { FaTimes, FaDownload, FaEye, FaFilePdf } from 'react-icons/fa';
 
 // Animation for modal appearance
 const fadeIn = keyframes`
@@ -81,12 +81,14 @@ const ModalContent = styled.div`
   padding: 1.5rem;
   height: calc(90vh - 120px);
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 `;
 
 const PDFContainer = styled.div`
   width: 100%;
-  height: 100%;
-  min-height: 600px;
+  flex: 1;
+  min-height: 400px;
   border: 1px solid ${({ theme }) => theme.border};
   border-radius: 8px;
   overflow: hidden;
@@ -111,6 +113,8 @@ const ActionButtons = styled.div`
   margin-top: 1rem;
   justify-content: center;
   flex-wrap: wrap;
+  flex-shrink: 0;
+  padding-bottom: 1rem;
 `;
 
 const ActionButton = styled.a`

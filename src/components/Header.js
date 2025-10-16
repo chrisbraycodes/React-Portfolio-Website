@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled, { ThemeProvider, keyframes } from 'styled-components';
-import { FaGithub, FaLinkedin, FaUserTie } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaFilePdf } from 'react-icons/fa';
 import GlobalStyles from '../styles/GlobalStyles';
 import { lightTheme, darkTheme } from '../theme';
 import ResumeModal from './ResumeModal';
@@ -27,7 +27,12 @@ const HeaderContainer = styled.header`
   animation: ${fibonacciLight} 120s infinite ease-in-out;
   position: relative;
   width: 100%;  // Ensure the container uses full width
+  overflow: visible;  // Ensure content is not clipped
+  min-height: 80px;  // Ensure consistent height
 
+  @media (max-width: 1200px) {
+    padding: 1rem 1.5rem;
+  }
 
   @media (max-width: 768px) {
     flex-direction: row;  // Keep layout as row for mobile
@@ -97,17 +102,26 @@ const IconContainer = styled.div`
   border-radius: 10px;  // Rounded corners
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  // Optional subtle shadow for depth
   margin-top: 0.5rem;  // Lower the box slightly for better alignment
+  flex-shrink: 0;  // Prevent shrinking
+  max-width: calc(100vw - 400px);  // Ensure it doesn't take too much space
+
+  @media (max-width: 1200px) {
+    gap: 0.8rem;
+    padding: 0.5rem 0.8rem;
+  }
 
   @media (max-width: 768px) {
     margin-top: 0;  // Remove margin-top on mobile
     padding: 0.5rem;  // Adjust padding for smaller screens
     gap: 0.5rem;  // Reduce gap on mobile
     flex-wrap: wrap;  // Allow wrapping on very small screens
+    max-width: calc(100vw - 200px);
   }
 
   @media (max-width: 480px) {
     gap: 0.25rem;  // Even smaller gap on very small screens
     padding: 0.25rem 0.5rem;  // Smaller padding
+    max-width: calc(100vw - 150px);
   }
 `;
 
@@ -191,6 +205,12 @@ const ResumeButton = styled.button`
         font-size: 1rem;
     }
 
+    @media (max-width: 1200px) {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+        gap: 0.4rem;
+    }
+
     @media (max-width: 768px) {
         padding: 0.4rem 0.8rem;
         font-size: 0.8rem;
@@ -271,8 +291,8 @@ const Header = ({ toggleTheme, isDarkMode }) => {
             <FaLinkedin />
           </IconLink>
           <ResumeButton onClick={() => setResumeModalOpen(true)} title="View Resume">
-            <FaUserTie />
-            <span>Resume</span>
+            <FaFilePdf />
+            <span>RES</span>
           </ResumeButton>
           <ThemeToggle onClick={toggleTheme}>
             {isDarkMode ? 'Day Mode' : 'Night Mode'}
