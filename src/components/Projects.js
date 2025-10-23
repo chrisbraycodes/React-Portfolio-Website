@@ -82,7 +82,7 @@ const Projects = () => {
 
     const featuredProject = {
         title: 'Unfinished Work - AI-First Project Partner',
-        description: `🧠 AI-first productivity platform designed for creators, builders, and thinkers. Features 7 AI modes: Daily Coach, Project Critic, Research Assistant, Health Score, Risk Analysis, Timeline Prediction, and Priority Matrix. Includes AI visual generation with DALL-E 3 for project logos, banners, and mood boards. Built with React Native/Expo, Firebase backend, OpenAI API integration, and biometric authentication (Face ID/Touch ID). Multi-platform support with iOS app live, Android and web versions in development. Subscription model: Free (5 AI interactions/month), Pro ($14.99/month), Yearly ($139.99/year), Lifetime ($399.99).`,
+        description: `🧠 AI-first productivity platform designed for creators, builders, and thinkers. Features 7 AI modes: Daily Coach, Project Critic, Research Assistant, Health Score, Risk Analysis, Timeline Prediction, and Priority Matrix. Includes AI visual generation with DALL-E 3 for project logos, banners, and mood boards. Built with React Native/Expo, Firebase backend, OpenAI API integration, and biometric authentication (Face ID/Touch ID). Multi-platform support with iOS app live, Android and web versions in development. Token-based pricing: Free (100 tokens/month), Pro ($9.99/month), Pro+ ($19.99/month), Ultra ($39.99/month) with 90%+ AI cost optimization through smart model selection and caching.`,
         link: 'https://unfinished-work.com',
         imageSrc: '/unfinished-work-featured.png',
         buttonText: 'Visit Website',
