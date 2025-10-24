@@ -82,7 +82,23 @@ const Projects = () => {
 
     const featuredProject = {
         title: 'Unfinished-Work - AI-First Project Partner',
-        description: `🚀 Developed AI-first productivity platform featuring conversational AI Chat with project creation, memory, and context awareness - the core featured functionality. Built comprehensive AI system with 10+ modes: AI Chat, Daily Coach, Project Critic, Research Assistant, Health Score, Risk Assessment, Timeline Prediction, Priority Matrix, AI Text Rewriting, and AI Visual Generation. Implemented AI-generated todos and task management with smart suggestions and automated project tracking. Created DALL-E 3 integration for AI visual generation including project logos, banners, thumbnails, and mood boards with custom style options. Built cross-platform solution using React Native/Expo with iOS app deployed and integrated OpenAI GPT-4o, GPT-4o-mini, and GPT-3.5-turbo with smart model selection. Implemented Firebase backend with Firestore database, Authentication, Cloud Functions, and Storage with biometric security (Face ID/Touch ID) and real-time collaboration. Created token-based subscription system with Apple StoreKit integration supporting free (100 tokens/month), pro ($9.99/month, $99.99/year), pro+ ($19.99/month, $199.99/year), and ultra ($39.99/month, $399.99/year) tiers with token packages (200/$4.99, 600/$12.99, 1500/$29.99). Built social features for user discovery, project sharing, and community engagement with responsive UI/UX and dark/light theme support. Implemented AI cost optimization.`,
+        description: `🚀 Developed AI-first productivity platform featuring conversational AI Chat with project creation, memory, and context awareness - the core featured functionality
+
+• Built comprehensive AI system with 10+ modes: AI Chat, Daily Coach, Project Critic, Research Assistant, Health Score, Risk Assessment, Timeline Prediction, Priority Matrix, AI Text Rewriting, and AI Visual Generation
+
+• Implemented AI-generated todos and task management with smart suggestions and automated project tracking
+
+• Created DALL-E 3 integration for AI visual generation including project logos, banners, thumbnails, and mood boards with custom style options
+
+• Built cross-platform solution using React Native/Expo with iOS app deployed and integrated OpenAI GPT-4o, GPT-4o-mini, and GPT-3.5-turbo with smart model selection
+
+• Implemented Firebase backend with Firestore database, Authentication, Cloud Functions, and Storage with biometric security (Face ID/Touch ID) and real-time collaboration
+
+• Created token-based subscription system with Apple StoreKit integration supporting free (100 tokens/month), pro ($9.99/month, $99.99/year), pro+ ($19.99/month, $199.99/year), and ultra ($39.99/month, $399.99/year) tiers with token packages (200/$4.99, 600/$12.99, 1500/$29.99)
+
+• Built social features for user discovery, project sharing, and community engagement with responsive UI/UX and dark/light theme support
+
+• Implemented AI cost optimization`,
         link: 'https://unfinished-work.com',
         imageSrc: '/unfinished-work-featured.png',
         buttonText: 'Visit Website',
