@@ -88,7 +88,7 @@ const About = () => (
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 1 }}
 >
-             Hi! I'm Chris Bray, a versatile <strong>Software Engineer</strong> with a passion for building data-driven, user-focused applications. I specialize in <strong>React</strong>, <strong>Python</strong>, and <strong>machine learning</strong>, and have built everything from interactive web and mobile apps to <strong>NLP pipelines</strong> and <strong>recommendation systems</strong>. I thrive on turning complex ideas into scalable, intuitive solutions.
+             Hi! I'm Chris Bray, a <strong>Full-Stack Software Engineer</strong> who transforms complex problems into elegant, user-centric solutions. I build everything from <strong>AI-powered web applications</strong> and <strong>mobile apps</strong> to <strong>machine learning pipelines</strong> and <strong>data-driven systems</strong>. With expertise in <strong>React</strong>, <strong>Python</strong>, and <strong>modern cloud technologies</strong>, I'm passionate about creating software that makes a real impact.
         </Paragraph>
 
     </AboutSection>
