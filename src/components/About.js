@@ -61,6 +61,7 @@ const Paragraph = styled(motion.p)`
     line-height: 1.6;
     margin: 0 auto;
     max-width: 700px;
+    color: ${({ theme }) => theme.text}; // Ensure text color is applied
 
     strong {
         color: ${({ theme }) => theme.linkHover}; // Highlighted text color
