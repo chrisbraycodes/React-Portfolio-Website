@@ -111,16 +111,7 @@ const ParticleBackground = () => {
 
     return (
         <BackgroundContainer ref={containerRef}>
-            {/* Floating circles */}
-            {Array.from({ length: 5 }).map((_, i) => (
-                <FloatingCircle
-                    key={`circle-${i}`}
-                    left={Math.random() * 100}
-                    duration={Math.random() * 10 + 10}
-                    delay={Math.random() * 5}
-                />
-            ))}
-            {/* Static twinkles */}
+            {/* Static twinkles only - removed floating circles */}
             {Array.from({ length: 20 }).map((_, i) => (
                 <Twinkle
                     key={`twinkle-${i}`}
