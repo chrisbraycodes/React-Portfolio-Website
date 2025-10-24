@@ -82,7 +82,7 @@ const Projects = () => {
 
     const featuredProject = {
         title: 'Unfinished Work - AI-First Project Partner',
-        description: `🧠 AI-first productivity platform designed for creators, builders, and thinkers. Features 22+ AI capabilities including Daily Coach, Project Critic, Research Assistant, Health Score, Risk Analysis, Timeline Prediction, Priority Matrix, AI Chat with project creation, AI text rewriting, progress summaries, conversation memory, and DALL-E 3 visual generation for logos/banners. Built with React Native/Expo, Firebase backend, OpenAI API integration, and biometric authentication (Face ID/Touch ID). Multi-platform support with iOS app live, Android and web versions in development. Token-based pricing: Free (100 tokens/month), Pro ($9.99/month, 800 tokens), Pro+ ($19.99/month, 1,500 tokens), Ultra ($39.99/month, 3,000 tokens) with 90%+ AI cost optimization through smart model selection and caching.`,
+        description: `🚀 AI-powered productivity platform for creators and entrepreneurs, featuring intelligent project collaboration tools and 7 AI modes including Daily Coach, Project Critic, Research Assistant, Health Score Analysis, Risk Assessment, Timeline Prediction, and Priority Matrix. Built with React Native/Expo, Firebase backend, OpenAI GPT-4o and DALL-E 3 integration, biometric security (Face ID/Touch ID), and comprehensive subscription system. iOS app live with full feature set, Android and web versions in development. Features social collaboration, real-time sync, and AI visual generation for project assets.`,
         link: 'https://unfinished-work.com',
         imageSrc: '/unfinished-work-featured.png',
         buttonText: 'Visit Website',
