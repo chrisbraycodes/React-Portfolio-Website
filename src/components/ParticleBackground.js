@@ -1,7 +1,23 @@
 import React, { useEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 
-// Removed unused float animation
+// Float animation for particles
+const float = keyframes`
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+    }
+`;
 
 const twinkle = keyframes`
     0%, 100% {
@@ -26,7 +42,19 @@ const BackgroundContainer = styled.div`
     overflow: hidden;
 `;
 
-// Removed unused Particle styled component
+// Floating circle particle
+const FloatingCircle = styled.div`
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-image: url('/circle.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    animation: ${float} ${({ duration }) => duration}s linear infinite;
+    left: ${({ left }) => left}%;
+    animation-delay: ${({ delay }) => delay}s;
+`;
 
 const Twinkle = styled.div`
     position: absolute;
@@ -83,10 +111,19 @@ const ParticleBackground = () => {
 
     return (
         <BackgroundContainer ref={containerRef}>
+            {/* Floating circles */}
+            {Array.from({ length: 5 }).map((_, i) => (
+                <FloatingCircle
+                    key={`circle-${i}`}
+                    left={Math.random() * 100}
+                    duration={Math.random() * 10 + 10}
+                    delay={Math.random() * 5}
+                />
+            ))}
             {/* Static twinkles */}
             {Array.from({ length: 20 }).map((_, i) => (
                 <Twinkle
-                    key={i}
+                    key={`twinkle-${i}`}
                     left={Math.random() * 100}
                     top={Math.random() * 100}
                     delay={Math.random() * 2}
