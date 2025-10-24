@@ -47,7 +47,7 @@ const FloatingCircle = styled.div`
     position: absolute;
     width: 20px;
     height: 20px;
-    background-image: url('/circle.png');
+    background-image: url('/circleNice.png?v=2');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
