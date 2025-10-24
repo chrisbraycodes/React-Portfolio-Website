@@ -84,7 +84,6 @@ const About = () => (
         <ProfileImage src="/profileImage.png" alt="Christopher Bray's Profile Picture" />
         <Paragraph
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 1 }}
 >
              Hi! I'm Chris Bray, a versatile <strong>Software Engineer</strong> with a passion for building data-driven, user-focused applications. I specialize in <strong>React</strong>, <strong>Python</strong>, and <strong>machine learning</strong>, and have built everything from interactive web and mobile apps to <strong>NLP pipelines</strong> and <strong>recommendation systems</strong>. I thrive on turning complex ideas into scalable, intuitive solutions.
