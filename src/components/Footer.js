@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { useTheme } from 'styled-components';
+import GitHubProfileModal from './GitHubProfileModal';
+import LinkedInProfileModal from './LinkedInProfileModal';
 
 // Wandering light animation for the background
 const fibonacciLight = keyframes`
@@ -45,6 +48,27 @@ const FooterLink = styled.a`
     display: inline-block;
     transition: all 0.3s ease-in-out;
     text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+
+    &:hover {
+        animation: ${pulse} 0.6s ease-in-out infinite; // Add pulse effect
+        transform: scale(1.2);
+        color: #333;
+    }
+`;
+
+const FooterLinkButton = styled.button`
+    color: #000;
+    text-decoration: none;
+    font-size: 1.2rem;
+    margin: 0 1rem;
+    display: inline-block;
+    transition: all 0.3s ease-in-out;
+    text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.8);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
 
     &:hover {
         animation: ${pulse} 0.6s ease-in-out infinite; // Add pulse effect
@@ -69,27 +93,66 @@ const FooterIcon = styled.a`
     }
 `;
 
+const FooterIconButton = styled.button`
+    display: inline-block;
+    margin: 0 1rem;
+    font-size: 1.5rem;
+    color: #000;
+    text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease-in-out;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+
+    &:hover {
+        animation: ${pulse} 0.6s ease-in-out infinite; // Add pulse effect
+        transform: scale(1.2);
+        color: #333;
+    }
+`;
+
 // Footer component with links and icons
-const Footer = () => (
-    <FooterContainer>
-        <p>
-            Built by Christopher Bray. Connect with me on{' '}
-            <FooterLink href="https://github.com/chrisbraycodes" target="_blank" rel="noopener noreferrer">
-                GitHub
-            </FooterLink>{' '}
-            and{' '}
-            <FooterLink href="https://www.linkedin.com/in/chrisbraycodes/" target="_blank" rel="noopener noreferrer">
-                LinkedIn
-            </FooterLink>
-            .
-        </p>
-        <FooterIcon href="https://github.com/chrisbraycodes" target="_blank" rel="noopener noreferrer">
-            <i className="fab fa-github"></i>
-        </FooterIcon>
-        <FooterIcon href="https://www.linkedin.com/in/chrisbraycodes/" target="_blank" rel="noopener noreferrer">
-            <i className="fab fa-linkedin"></i>
-        </FooterIcon>
-    </FooterContainer>
-);
+const Footer = () => {
+    const [githubModalOpen, setGithubModalOpen] = useState(false);
+    const [linkedInModalOpen, setLinkedInModalOpen] = useState(false);
+    const theme = useTheme();
+
+    return (
+        <>
+            <FooterContainer>
+                <p>
+                    Built by Christopher Bray. Connect with me on{' '}
+                    <FooterLinkButton onClick={() => setGithubModalOpen(true)}>
+                        GitHub
+                    </FooterLinkButton>{' '}
+                    and{' '}
+                    <FooterLinkButton onClick={() => setLinkedInModalOpen(true)}>
+                        LinkedIn
+                    </FooterLinkButton>
+                    .
+                </p>
+                <FooterIconButton onClick={() => setGithubModalOpen(true)}>
+                    <i className="fab fa-github"></i>
+                </FooterIconButton>
+                <FooterIconButton onClick={() => setLinkedInModalOpen(true)}>
+                    <i className="fab fa-linkedin"></i>
+                </FooterIconButton>
+            </FooterContainer>
+            <GitHubProfileModal
+                isOpen={githubModalOpen}
+                onClose={() => setGithubModalOpen(false)}
+                username="chrisbraycodes"
+                theme={theme}
+            />
+            <LinkedInProfileModal
+                isOpen={linkedInModalOpen}
+                onClose={() => setLinkedInModalOpen(false)}
+                profileUrl="https://www.linkedin.com/in/chrisbraycodes/"
+                theme={theme}
+            />
+        </>
+    );
+};
 
 export default Footer;

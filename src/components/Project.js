@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import { useTheme } from 'styled-components';
 import LiveDemoModal from './LiveDemoModal';
+import GitHubInfoModal from './GitHubInfoModal';
 
 const ProjectCard = styled.div`
     display: flex;
@@ -159,8 +160,15 @@ const LanguageTag = styled.span`
 
 const Project = ({ title, description, link, imageSrc, buttonText = "View on GitHub", icon: Icon = FaGithub, liveDemoLink, liveDemoText = "Live Demo", isFeatured = false, languages = [], projectId }) => {
     const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+    const [isGitHubModalOpen, setIsGitHubModalOpen] = useState(false);
     const [modalUrl, setModalUrl] = useState('');
+    const [githubUrl, setGithubUrl] = useState('');
     const theme = useTheme();
+
+    // Check if URL is a GitHub link
+    const isGitHubLink = (url) => {
+        return url && (url.includes('github.com') || url.includes('github.io'));
+    };
 
     const openModal = (url) => {
         if (url) {
@@ -169,11 +177,22 @@ const Project = ({ title, description, link, imageSrc, buttonText = "View on Git
         }
     };
 
+    const openGitHubModal = (url) => {
+        if (url) {
+            setGithubUrl(url);
+            setIsGitHubModalOpen(true);
+        }
+    };
+
     const handleLinkClick = (e, url) => {
         e.preventDefault();
         e.stopPropagation();
-        // All links open in modal now
-        openModal(url);
+        // GitHub links open GitHub info modal, everything else opens iframe modal
+        if (isGitHubLink(url)) {
+            openGitHubModal(url);
+        } else {
+            openModal(url);
+        }
     };
 
     if (isFeatured) {
@@ -211,6 +230,15 @@ const Project = ({ title, description, link, imageSrc, buttonText = "View on Git
                     }}
                     url={modalUrl}
                     title={title}
+                    theme={theme}
+                />
+                <GitHubInfoModal
+                    isOpen={isGitHubModalOpen}
+                    onClose={() => {
+                        setIsGitHubModalOpen(false);
+                        setGithubUrl('');
+                    }}
+                    githubUrl={githubUrl}
                     theme={theme}
                 />
             </FeaturedProjectCard>
@@ -253,6 +281,15 @@ const Project = ({ title, description, link, imageSrc, buttonText = "View on Git
                 }}
                 url={modalUrl}
                 title={title}
+                theme={theme}
+            />
+            <GitHubInfoModal
+                isOpen={isGitHubModalOpen}
+                onClose={() => {
+                    setIsGitHubModalOpen(false);
+                    setGithubUrl('');
+                }}
+                githubUrl={githubUrl}
                 theme={theme}
             />
         </>

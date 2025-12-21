@@ -123,7 +123,7 @@ const Projects = () => {
             imageSrc: '/my reads small.jpg',
             liveDemoLink: 'https://my-reads-blush.vercel.app/user/Sa5k2YkdBeboba7xhp2tToix22O2',
             liveDemoText: 'Live Demo',
-            languages: ['React', 'JavaScript', 'CSS', 'Firebase', 'Firestore', 'Google Books API', 'React Router'],
+            languages: ['React', 'Redux', 'JavaScript', 'CSS', 'Firebase', 'Firestore', 'Google Books API', 'React Router'],
         },
         {
             title: 'Rick and Morty Character Explorer',
@@ -142,7 +142,7 @@ const Projects = () => {
             imageSrc: '/pipeline small.jpg',
             liveDemoLink: 'https://nbviewer.org/github/chrisbraycodes/nlp-product-review-classifier/blob/master/starter/starter.ipynb',
             liveDemoText: 'View Notebook',
-            languages: ['Python', 'Flask', 'spaCy', 'scikit-learn', 'NLP', 'Machine Learning'],
+            languages: ['Python', 'Pandas', 'Flask', 'spaCy', 'scikit-learn', 'NLP', 'Machine Learning'],
         },
         {
             title: 'InfoRomantic – iOS Dating App',

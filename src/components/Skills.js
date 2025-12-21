@@ -276,6 +276,7 @@ const Skills = () => {
     // Project mapping - maps skill names to project titles
     const projectMapping = {
         'React.js': ['MyReads – Book Tracking App', 'chrisbraycodes.com – Portfolio Website'],
+        'Redux': ['MyReads – Book Tracking App'],
         'React Native': ['Unfinished-Work - AI-First Project Partner'],
         'Expo': ['Unfinished-Work - AI-First Project Partner'],
         'TypeScript': ['chrisbraycodes.com – Portfolio Website', 'Unfinished-Work - AI-First Project Partner'],
@@ -297,6 +298,7 @@ const Skills = () => {
         'React Router': ['MyReads – Book Tracking App'],
         'spaCy': ['Text Classification Pipeline (NLP, Flask, ML)'],
         'scikit-learn': ['Text Classification Pipeline (NLP, Flask, ML)'],
+        'Pandas': ['Text Classification Pipeline (NLP, Flask, ML)'],
         'Machine Learning': ['Text Classification Pipeline (NLP, Flask, ML)'],
         'NLP': ['Text Classification Pipeline (NLP, Flask, ML)'],
         'Apple StoreKit': ['Unfinished-Work - AI-First Project Partner'],
@@ -341,7 +343,7 @@ const Skills = () => {
             proficiency: 85,
             description: 'Managing complex application state with Redux Toolkit and middleware.',
             category: 'frontend',
-            projects: []
+            projects: projectMapping['Redux'] || []
         },
         { 
             icon: <FaJsSquare />, 
@@ -500,7 +502,7 @@ const Skills = () => {
             proficiency: 85,
             description: 'Data manipulation and analysis with powerful DataFrame operations.',
             category: 'ml',
-            projects: []
+            projects: projectMapping['Pandas'] || []
         },
         { 
             icon: <SiScikitlearn />, 
