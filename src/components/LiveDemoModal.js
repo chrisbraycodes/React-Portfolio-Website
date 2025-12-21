@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import styled, { keyframes } from 'styled-components';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaExternalLinkAlt } from 'react-icons/fa';
 
 // Animation for modal appearance
 const fadeIn = keyframes`
@@ -32,7 +33,8 @@ const ModalOverlay = styled.div`
 const ModalContainer = styled.div`
   background: ${({ theme }) => theme.body};
   border-radius: 15px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  border: 4px solid ${({ theme }) => theme.linkHover};
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 2px ${({ theme }) => theme.linkHover}40;
   max-width: 95vw;
   max-height: 95vh;
   width: 100%;
@@ -98,7 +100,90 @@ const DemoIframe = styled.iframe`
   display: block;
 `;
 
+const ErrorMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+  color: ${({ theme }) => theme.text};
+`;
+
+const ErrorTitle = styled.h3`
+  color: ${({ theme }) => theme.linkHover};
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+`;
+
+const ErrorText = styled.p`
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+  line-height: 1.6;
+`;
+
+const OpenInNewTabButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: ${({ theme }) => theme.linkHover};
+  color: ${({ theme }) => theme.body};
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+  }
+
+  svg {
+    font-size: 1.1rem;
+  }
+`;
+
 const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
+  const [iframeError, setIframeError] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Reset error state when URL changes
+    if (isOpen && url) {
+      setIframeError(false);
+      setLoading(true);
+      
+      // Check for known sites that block iframes
+      const blockedDomains = ['unfinished-work.com', 'github.com'];
+      const isBlockedDomain = blockedDomains.some(domain => url.includes(domain));
+      
+      if (isBlockedDomain) {
+        // Immediately show error for known blocked sites
+        setTimeout(() => {
+          setIframeError(true);
+          setLoading(false);
+        }, 500);
+        return;
+      }
+      
+      // Set a timeout to detect if iframe fails to load (faster detection)
+      const timeout = setTimeout(() => {
+        // If still loading after 1.5 seconds, likely blocked
+        if (loading) {
+          setIframeError(true);
+          setLoading(false);
+        }
+      }, 1500);
+      
+      return () => clearTimeout(timeout);
+    }
+  }, [isOpen, url, loading]);
+
   useEffect(() => {
     // Prevent body scroll when modal is open
     if (isOpen) {
@@ -127,9 +212,41 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  const handleIframeError = () => {
+    setIframeError(true);
+    setLoading(false);
+  };
 
-  return (
+  const handleIframeLoad = () => {
+    setLoading(false);
+    // Check if iframe actually loaded content or is blocked
+    setTimeout(() => {
+      try {
+        const iframe = document.querySelector('iframe[title*="Live Demo"]');
+        if (iframe && iframe.contentWindow) {
+          // Try to access - will throw if blocked
+          void iframe.contentWindow.location;
+        }
+      } catch (e) {
+        // Cross-origin is normal, but if we can't access at all, might be blocked
+        // For GitHub and other sites, this is expected and fine
+      }
+    }, 500);
+  };
+
+  const handleOpenInNewTab = () => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+    onClose();
+  };
+
+  if (!isOpen || !url) return null;
+
+  // Ensure document.body exists before creating portal
+  if (typeof document === 'undefined' || !document.body) {
+    return null;
+  }
+
+  const modalContent = (
     <ModalOverlay onClick={onClose}>
       <ModalContainer theme={theme} onClick={(e) => e.stopPropagation()}>
         <ModalHeader theme={theme}>
@@ -139,16 +256,61 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
           </CloseButton>
         </ModalHeader>
         <IframeContainer>
-          <DemoIframe
-            src={url}
-            title={title || 'Live Demo'}
-            allow="fullscreen"
-            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-          />
+          {iframeError ? (
+            <ErrorMessage theme={theme}>
+              <ErrorTitle theme={theme}>Unable to Embed Site</ErrorTitle>
+              <ErrorText theme={theme}>
+                This website cannot be displayed in an embedded view due to security settings.
+                <br />
+                Click the button below to open it in a new tab instead.
+              </ErrorText>
+              <OpenInNewTabButton theme={theme} onClick={handleOpenInNewTab}>
+                <FaExternalLinkAlt />
+                Open in New Tab
+              </OpenInNewTabButton>
+            </ErrorMessage>
+          ) : (
+            <>
+              {loading && (
+                <ErrorMessage theme={theme}>
+                  <ErrorText theme={theme}>Loading...</ErrorText>
+                </ErrorMessage>
+              )}
+              <DemoIframe
+                src={url}
+                title={title || 'Live Demo'}
+                allow="fullscreen"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation"
+                onError={handleIframeError}
+                onLoad={handleIframeLoad}
+                style={{ display: loading ? 'none' : 'block' }}
+                onMouseEnter={() => {
+                  // Try to detect blocking on interaction
+                  setTimeout(() => {
+                    try {
+                      const iframe = document.querySelector('iframe[title*="Live Demo"]');
+                      if (iframe && iframe.contentWindow) {
+                        // This will throw if blocked
+                        void iframe.contentWindow.location;
+                      }
+                    } catch (e) {
+                      // Blocked - show error
+                      if (!iframeError) {
+                        setIframeError(true);
+                        setLoading(false);
+                      }
+                    }
+                  }, 100);
+                }}
+              />
+            </>
+          )}
         </IframeContainer>
       </ModalContainer>
     </ModalOverlay>
   );
+
+  return createPortal(modalContent, document.body);
 };
 
 export default LiveDemoModal;

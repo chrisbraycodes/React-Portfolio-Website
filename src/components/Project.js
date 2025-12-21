@@ -162,19 +162,6 @@ const Project = ({ title, description, link, imageSrc, buttonText = "View on Git
     const [modalUrl, setModalUrl] = useState('');
     const theme = useTheme();
 
-    // Check if URL is a GitHub link
-    const isGitHubLink = (url) => {
-        return url && (url.includes('github.com') || url.includes('github.io'));
-    };
-
-    const openNewWindow = (url) => {
-        if (url) {
-            window.open(url, '_blank', 'noopener,noreferrer');
-        } else {
-            console.error('No link provided for this project.');
-        }
-    };
-
     const openModal = (url) => {
         if (url) {
             setModalUrl(url);
@@ -182,13 +169,11 @@ const Project = ({ title, description, link, imageSrc, buttonText = "View on Git
         }
     };
 
-    const handleLinkClick = (url) => {
-        // GitHub links open in new tab, everything else opens in modal
-        if (isGitHubLink(url)) {
-            openNewWindow(url);
-        } else {
-            openModal(url);
-        }
+    const handleLinkClick = (e, url) => {
+        e.preventDefault();
+        e.stopPropagation();
+        // All links open in modal now
+        openModal(url);
     };
 
     if (isFeatured) {
@@ -206,27 +191,28 @@ const Project = ({ title, description, link, imageSrc, buttonText = "View on Git
                 )}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%', maxWidth: '400px' }}>
                     {link && (
-                        <ProjectLinkButton onClick={() => handleLinkClick(link)}>
+                        <ProjectLinkButton type="button" onClick={(e) => handleLinkClick(e, link)}>
                             <Icon />
                             {buttonText}
                         </ProjectLinkButton>
                     )}
                     {liveDemoLink && (
-                        <ProjectLinkButton onClick={() => handleLinkClick(liveDemoLink)}>
+                        <ProjectLinkButton type="button" onClick={(e) => handleLinkClick(e, liveDemoLink)}>
                             <FaExternalLinkAlt />
                             {liveDemoText}
                         </ProjectLinkButton>
                     )}
                 </div>
-                {(link || liveDemoLink) && (
-                    <LiveDemoModal
-                        isOpen={isDemoModalOpen}
-                        onClose={() => setIsDemoModalOpen(false)}
-                        url={modalUrl}
-                        title={title}
-                        theme={theme}
-                    />
-                )}
+                <LiveDemoModal
+                    isOpen={isDemoModalOpen}
+                    onClose={() => {
+                        setIsDemoModalOpen(false);
+                        setModalUrl('');
+                    }}
+                    url={modalUrl}
+                    title={title}
+                    theme={theme}
+                />
             </FeaturedProjectCard>
         );
     }
@@ -246,28 +232,29 @@ const Project = ({ title, description, link, imageSrc, buttonText = "View on Git
                 )}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
                     {link && (
-                        <ProjectLinkButton onClick={() => handleLinkClick(link)}>
+                        <ProjectLinkButton type="button" onClick={(e) => handleLinkClick(e, link)}>
                             <Icon />
                             {buttonText}
                         </ProjectLinkButton>
                     )}
                     {liveDemoLink && (
-                        <ProjectLinkButton onClick={() => handleLinkClick(liveDemoLink)}>
+                        <ProjectLinkButton type="button" onClick={(e) => handleLinkClick(e, liveDemoLink)}>
                             <FaExternalLinkAlt />
                             {liveDemoText}
                         </ProjectLinkButton>
                     )}
                 </div>
             </ProjectCard>
-            {(link || liveDemoLink) && (
-                <LiveDemoModal
-                    isOpen={isDemoModalOpen}
-                    onClose={() => setIsDemoModalOpen(false)}
-                    url={modalUrl}
-                    title={title}
-                    theme={theme}
-                />
-            )}
+            <LiveDemoModal
+                isOpen={isDemoModalOpen}
+                onClose={() => {
+                    setIsDemoModalOpen(false);
+                    setModalUrl('');
+                }}
+                url={modalUrl}
+                title={title}
+                theme={theme}
+            />
         </>
     );
 };

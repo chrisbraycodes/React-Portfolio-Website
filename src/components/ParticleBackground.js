@@ -51,9 +51,9 @@ const FloatingCircle = styled.div`
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    animation: ${float} ${({ duration }) => duration}s linear infinite;
-    left: ${({ left }) => left}%;
-    animation-delay: ${({ delay }) => delay}s;
+    animation: ${float} ${({ $duration }) => $duration}s linear infinite;
+    left: ${({ $left }) => $left}%;
+    animation-delay: ${({ $delay }) => $delay}s;
 `;
 
 const Twinkle = styled.div`
@@ -63,9 +63,9 @@ const Twinkle = styled.div`
     background: white;
     border-radius: 50%;
     animation: ${twinkle} 2s ease-in-out infinite;
-    left: ${({ left }) => left}%;
-    top: ${({ top }) => top}%;
-    animation-delay: ${({ delay }) => delay}s;
+    left: ${({ $left }) => $left}%;
+    top: ${({ $top }) => $top}%;
+    animation-delay: ${({ $delay }) => $delay}s;
 `;
 
 const ParticleBackground = () => {
@@ -115,9 +115,9 @@ const ParticleBackground = () => {
             {Array.from({ length: 20 }).map((_, i) => (
                 <Twinkle
                     key={`twinkle-${i}`}
-                    left={Math.random() * 100}
-                    top={Math.random() * 100}
-                    delay={Math.random() * 2}
+                    $left={Math.random() * 100}
+                    $top={Math.random() * 100}
+                    $delay={Math.random() * 2}
                 />
             ))}
         </BackgroundContainer>

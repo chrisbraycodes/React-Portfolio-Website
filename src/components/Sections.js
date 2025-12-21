@@ -1,6 +1,6 @@
 import { About } from './About';
 import { Projects } from './Projects';
-import { Tools } from './Tools';
+// import { Tools } from './Tools'; // Removed - redundant section
 import Skills from './Skills';
 import styled from 'styled-components';
 import Contact from './Contact';
@@ -28,4 +28,4 @@ const SectionTitle = styled.h2`
     color: ${({ theme }) => theme.mode === 'dark' ? '#ffffff' : theme.text};
 `;
 
-export { About, Contact, Projects, Tools, Skills, Section, SectionTitle };
+export { About, Contact, Projects, Skills, Section, SectionTitle };

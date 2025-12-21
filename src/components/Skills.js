@@ -116,14 +116,14 @@ const CategoryTabs = styled.div`
 
 const Tab = styled.button`
     padding: 0.75rem 1.5rem;
-    border: 2px solid ${({ active, theme }) => active ? theme.linkHover : theme.border};
-    background: ${({ active, theme }) => active ? theme.linkHover : 'transparent'};
-    color: ${({ active, theme }) => active ? theme.body : theme.text};
+    border: 2px solid ${({ $active, theme }) => $active ? theme.linkHover : theme.border};
+    background: ${({ $active, theme }) => $active ? theme.linkHover : 'transparent'};
+    color: ${({ $active, theme }) => $active ? theme.body : theme.text};
     border-radius: 25px;
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: bold;
-    animation: ${fadeInUp} 0.8s ease-out ${({ index }) => index * 0.1}s both;
+    animation: ${fadeInUp} 0.8s ease-out ${({ $index }) => $index * 0.1}s both;
 
     &:hover {
         transform: translateY(-2px);
@@ -149,7 +149,7 @@ const SkillCard = styled.div`
     transition: all 0.3s ease, background 0.3s ease, color 0.3s ease;
     position: relative;
     overflow: hidden;
-    animation: ${fadeInUp} 0.8s ease-out ${({ index }) => index * 0.1}s both;
+    animation: ${fadeInUp} 0.8s ease-out ${({ $index }) => $index * 0.1}s both;
 
     &::before {
         content: '';
@@ -547,9 +547,9 @@ const Skills = () => {
                 {Object.entries(skillCategories).map(([key, category], index) => (
                     <Tab
                         key={key}
-                        active={activeCategory === key}
+                        $active={activeCategory === key}
                         onClick={() => setActiveCategory(key)}
-                        index={index}
+                        $index={index}
                     >
                         {category.icon} {category.name}
                     </Tab>
@@ -558,7 +558,7 @@ const Skills = () => {
 
             <SkillsGrid>
                 {filteredSkills.map((skill, index) => (
-                    <SkillCard key={index} index={index}>
+                    <SkillCard key={index} $index={index}>
                         <SkillHeader>
                             <SkillIcon>
                         {skill.icon}
