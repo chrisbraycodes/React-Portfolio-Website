@@ -158,31 +158,16 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
       setIframeError(false);
       setLoading(true);
       
-      // Check for known sites that block iframes
-      const blockedDomains = ['unfinished-work.com', 'github.com'];
-      const isBlockedDomain = blockedDomains.some(domain => url.includes(domain));
-      
-      if (isBlockedDomain) {
-        // Immediately show error for known blocked sites
-        setTimeout(() => {
-          setIframeError(true);
-          setLoading(false);
-        }, 500);
-        return;
-      }
-      
-      // Set a timeout to detect if iframe fails to load (faster detection)
+      // Set a timeout to detect if iframe fails to load
       const timeout = setTimeout(() => {
-        // If still loading after 1.5 seconds, likely blocked
-        if (loading) {
-          setIframeError(true);
-          setLoading(false);
-        }
-      }, 1500);
+        // If still loading after 5 seconds, likely blocked or slow
+        setIframeError(true);
+        setLoading(false);
+      }, 5000);
       
       return () => clearTimeout(timeout);
     }
-  }, [isOpen, url, loading]);
+  }, [isOpen, url]);
 
   useEffect(() => {
     // Prevent body scroll when modal is open
@@ -218,20 +203,9 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
   };
 
   const handleIframeLoad = () => {
+    // Iframe loaded - hide loading indicator
     setLoading(false);
-    // Check if iframe actually loaded content or is blocked
-    setTimeout(() => {
-      try {
-        const iframe = document.querySelector('iframe[title*="Live Demo"]');
-        if (iframe && iframe.contentWindow) {
-          // Try to access - will throw if blocked
-          void iframe.contentWindow.location;
-        }
-      } catch (e) {
-        // Cross-origin is normal, but if we can't access at all, might be blocked
-        // For GitHub and other sites, this is expected and fine
-      }
-    }, 500);
+    setIframeError(false);
   };
 
   const handleOpenInNewTab = () => {
@@ -280,27 +254,13 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
                 src={url}
                 title={title || 'Live Demo'}
                 allow="fullscreen"
-                sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation allow-modals"
                 onError={handleIframeError}
                 onLoad={handleIframeLoad}
-                style={{ display: loading ? 'none' : 'block' }}
-                onMouseEnter={() => {
-                  // Try to detect blocking on interaction
-                  setTimeout(() => {
-                    try {
-                      const iframe = document.querySelector('iframe[title*="Live Demo"]');
-                      if (iframe && iframe.contentWindow) {
-                        // This will throw if blocked
-                        void iframe.contentWindow.location;
-                      }
-                    } catch (e) {
-                      // Blocked - show error
-                      if (!iframeError) {
-                        setIframeError(true);
-                        setLoading(false);
-                      }
-                    }
-                  }, 100);
+                style={{ 
+                  display: 'block',
+                  opacity: loading ? 0 : 1,
+                  transition: 'opacity 0.3s ease'
                 }}
               />
             </>
