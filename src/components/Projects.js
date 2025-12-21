@@ -121,7 +121,7 @@ const Projects = () => {
             description: `A modern bookshelf app that lets users search for books, organize them into shelves, and persist selections. Features Google Books API integration, Firebase authentication, user accounts, book details pages, and fully responsive design.`,
             link: 'https://github.com/chrisbraycodes/My-Reads',
             imageSrc: '/my reads small.jpg',
-            liveDemoLink: 'https://my-reads-blush.vercel.app/user/BpL49d33g7cyoS2sc32REKqMCYz1',
+            liveDemoLink: 'https://my-reads-blush.vercel.app/user/Sa5k2YkdBeboba7xhp2tToix22O2',
             liveDemoText: 'Live Demo',
             languages: ['React', 'JavaScript', 'CSS', 'Firebase', 'Firestore', 'Google Books API', 'React Router'],
         },

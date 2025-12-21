@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { useTheme } from 'styled-components';
+import LiveDemoModal from './LiveDemoModal';
 
 const ProjectCard = styled.div`
     display: flex;
@@ -156,11 +158,36 @@ const LanguageTag = styled.span`
 `;
 
 const Project = ({ title, description, link, imageSrc, buttonText = "View on GitHub", icon: Icon = FaGithub, liveDemoLink, liveDemoText = "Live Demo", isFeatured = false, languages = [], projectId }) => {
+    const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+    const [modalUrl, setModalUrl] = useState('');
+    const theme = useTheme();
+
+    // Check if URL is a GitHub link
+    const isGitHubLink = (url) => {
+        return url && (url.includes('github.com') || url.includes('github.io'));
+    };
+
     const openNewWindow = (url) => {
         if (url) {
             window.open(url, '_blank', 'noopener,noreferrer');
         } else {
             console.error('No link provided for this project.');
+        }
+    };
+
+    const openModal = (url) => {
+        if (url) {
+            setModalUrl(url);
+            setIsDemoModalOpen(true);
+        }
+    };
+
+    const handleLinkClick = (url) => {
+        // GitHub links open in new tab, everything else opens in modal
+        if (isGitHubLink(url)) {
+            openNewWindow(url);
+        } else {
+            openModal(url);
         }
     };
 
@@ -179,49 +206,69 @@ const Project = ({ title, description, link, imageSrc, buttonText = "View on Git
                 )}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%', maxWidth: '400px' }}>
                     {link && (
-                        <ProjectLinkButton onClick={() => openNewWindow(link)}>
+                        <ProjectLinkButton onClick={() => handleLinkClick(link)}>
                             <Icon />
                             {buttonText}
                         </ProjectLinkButton>
                     )}
                     {liveDemoLink && (
-                        <ProjectLinkButton onClick={() => openNewWindow(liveDemoLink)}>
+                        <ProjectLinkButton onClick={() => handleLinkClick(liveDemoLink)}>
                             <FaExternalLinkAlt />
                             {liveDemoText}
                         </ProjectLinkButton>
                     )}
                 </div>
+                {(link || liveDemoLink) && (
+                    <LiveDemoModal
+                        isOpen={isDemoModalOpen}
+                        onClose={() => setIsDemoModalOpen(false)}
+                        url={modalUrl}
+                        title={title}
+                        theme={theme}
+                    />
+                )}
             </FeaturedProjectCard>
         );
     }
 
     return (
-        <ProjectCard id={projectId}>
-            {imageSrc && <ProjectImage src={imageSrc} alt={`${title} thumbnail`} />}
-            <ProjectTitle>{title}</ProjectTitle>
-            <ProjectDescription>{description}</ProjectDescription>
-            {languages && languages.length > 0 && (
-                <LanguagesList>
-                    {languages.map((lang, index) => (
-                        <LanguageTag key={index}>{lang}</LanguageTag>
-                    ))}
-                </LanguagesList>
+        <>
+            <ProjectCard id={projectId}>
+                {imageSrc && <ProjectImage src={imageSrc} alt={`${title} thumbnail`} />}
+                <ProjectTitle>{title}</ProjectTitle>
+                <ProjectDescription>{description}</ProjectDescription>
+                {languages && languages.length > 0 && (
+                    <LanguagesList>
+                        {languages.map((lang, index) => (
+                            <LanguageTag key={index}>{lang}</LanguageTag>
+                        ))}
+                    </LanguagesList>
+                )}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
+                    {link && (
+                        <ProjectLinkButton onClick={() => handleLinkClick(link)}>
+                            <Icon />
+                            {buttonText}
+                        </ProjectLinkButton>
+                    )}
+                    {liveDemoLink && (
+                        <ProjectLinkButton onClick={() => handleLinkClick(liveDemoLink)}>
+                            <FaExternalLinkAlt />
+                            {liveDemoText}
+                        </ProjectLinkButton>
+                    )}
+                </div>
+            </ProjectCard>
+            {(link || liveDemoLink) && (
+                <LiveDemoModal
+                    isOpen={isDemoModalOpen}
+                    onClose={() => setIsDemoModalOpen(false)}
+                    url={modalUrl}
+                    title={title}
+                    theme={theme}
+                />
             )}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
-                {link && (
-                    <ProjectLinkButton onClick={() => openNewWindow(link)}>
-                        <Icon />
-                        {buttonText}
-                    </ProjectLinkButton>
-                )}
-                {liveDemoLink && (
-                    <ProjectLinkButton onClick={() => openNewWindow(liveDemoLink)}>
-                        <FaExternalLinkAlt />
-                        {liveDemoText}
-                    </ProjectLinkButton>
-                )}
-            </div>
-        </ProjectCard>
+        </>
     );
 };
 
