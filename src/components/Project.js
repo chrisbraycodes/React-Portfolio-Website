@@ -187,6 +187,10 @@ const Project = ({ title, description, link, imageSrc, buttonText = "View on Git
     const handleLinkClick = (e, url) => {
         e.preventDefault();
         e.stopPropagation();
+        // Debug logging
+        if (process.env.NODE_ENV === 'development') {
+            console.log('Link clicked:', { url, isGitHub: isGitHubLink(url) });
+        }
         // GitHub links open GitHub info modal, everything else opens iframe modal
         if (isGitHubLink(url)) {
             openGitHubModal(url);

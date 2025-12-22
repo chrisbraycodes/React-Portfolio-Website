@@ -166,6 +166,10 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
       }, 5000);
       
       return () => clearTimeout(timeout);
+    } else if (!isOpen) {
+      // Reset states when modal closes
+      setIframeError(false);
+      setLoading(true);
     }
   }, [isOpen, url]);
 
@@ -220,6 +224,11 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
     return null;
   }
 
+  // Debug logging (remove in production if needed)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('LiveDemoModal rendering:', { isOpen, url, title, iframeError, loading });
+  }
+
   const modalContent = (
     <ModalOverlay onClick={onClose}>
       <ModalContainer theme={theme} onClick={(e) => e.stopPropagation()}>
@@ -257,11 +266,17 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
                 sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation allow-modals"
                 onError={handleIframeError}
                 onLoad={handleIframeLoad}
+                onLoadStart={() => {
+                  // Reset error when iframe starts loading
+                  setIframeError(false);
+                }}
                 style={{ 
                   display: 'block',
                   opacity: loading ? 0 : 1,
                   transition: 'opacity 0.3s ease'
                 }}
+                // Add referrerPolicy to help with some CORS issues
+                referrerPolicy="no-referrer-when-downgrade"
               />
             </>
           )}
