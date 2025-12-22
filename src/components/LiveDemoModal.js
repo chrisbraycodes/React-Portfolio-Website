@@ -98,6 +98,10 @@ const DemoIframe = styled.iframe`
   height: 100%;
   border: none;
   display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: ${({ theme }) => theme.background};
 `;
 
 const ErrorMessage = styled.div`
@@ -163,13 +167,30 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
         console.log('LiveDemoModal URL:', url);
       }
       
-      // Set a timeout to detect if iframe never loads (10 seconds)
+      // Set a timeout to detect if iframe never loads (15 seconds)
       const timeoutId = setTimeout(() => {
-        if (loading) {
-          console.warn('Iframe loading timeout for:', url);
-          // Don't automatically set error, as some sites take time to load
-        }
-      }, 10000);
+        setLoading((prevLoading) => {
+          if (prevLoading) {
+            console.warn('Iframe loading timeout for:', url);
+            // Check if iframe actually loaded but onLoad didn't fire
+            const iframe = document.querySelector(`iframe[src="${url}"]`);
+            if (iframe) {
+              try {
+                // Try to access iframe content to see if it loaded
+                iframe.contentWindow && iframe.contentWindow.document;
+                // If we can access it, it loaded successfully
+                return false;
+              } catch (e) {
+                // Cross-origin - this is normal, iframe likely loaded
+                // Don't set error, just stop showing loading
+                return false;
+              }
+            }
+            return prevLoading;
+          }
+          return prevLoading;
+        });
+      }, 15000);
       
       return () => clearTimeout(timeoutId);
     } else if (!isOpen) {
@@ -177,7 +198,7 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
       setIframeError(false);
       setLoading(true);
     }
-  }, [isOpen, url, loading]);
+  }, [isOpen, url]);
 
   useEffect(() => {
     // Prevent body scroll when modal is open
@@ -215,6 +236,7 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
   const handleIframeLoad = () => {
     // Iframe loaded - hide loading indicator
     setLoading(false);
+    setIframeError(false);
     
     // Check if iframe was redirected to a different domain
     try {
@@ -230,13 +252,13 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
         } catch (e) {
           // Cross-origin restrictions - this is normal for external sites
           // The iframe loaded, which is what matters
+          console.log('Iframe loaded successfully (cross-origin restrictions prevent location check)');
         }
       }
     } catch (e) {
       // Error checking iframe location - continue normally
+      console.log('Iframe loaded successfully');
     }
-    
-    setIframeError(false);
   };
 
   const handleOpenInNewTab = () => {
@@ -285,7 +307,7 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
           ) : (
             <>
               {loading && (
-                <ErrorMessage theme={theme}>
+                <ErrorMessage theme={theme} style={{ position: 'absolute', zIndex: 1 }}>
                   <ErrorText theme={theme}>Loading...</ErrorText>
                 </ErrorMessage>
               )}
@@ -293,8 +315,8 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
                 key={url}
                 src={url}
                 title={title || 'Live Demo'}
-                allow="fullscreen"
-                sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation allow-modals allow-presentation"
+                allow="fullscreen; autoplay; camera; microphone; geolocation; payment"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation allow-modals allow-presentation allow-downloads"
                 onError={handleIframeError}
                 onLoad={handleIframeLoad}
                 onLoadStart={() => {
@@ -303,11 +325,12 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
                 }}
                 style={{ 
                   display: 'block',
-                  opacity: loading ? 0 : 1,
-                  transition: 'opacity 0.3s ease'
+                  opacity: loading ? 0.3 : 1,
+                  transition: 'opacity 0.5s ease',
+                  zIndex: 2,
+                  pointerEvents: loading ? 'none' : 'auto'
                 }}
                 referrerPolicy="no-referrer-when-downgrade"
-                loading="lazy"
               />
             </>
           )}
