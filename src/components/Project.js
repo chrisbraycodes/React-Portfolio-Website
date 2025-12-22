@@ -172,6 +172,7 @@ const Project = ({ title, description, link, imageSrc, buttonText = "View on Git
 
     const openModal = (url) => {
         if (url) {
+            console.log('Opening modal with URL:', url);
             setModalUrl(url);
             setIsDemoModalOpen(true);
         }
@@ -188,9 +189,7 @@ const Project = ({ title, description, link, imageSrc, buttonText = "View on Git
         e.preventDefault();
         e.stopPropagation();
         // Debug logging
-        if (process.env.NODE_ENV === 'development') {
-            console.log('Link clicked:', { url, isGitHub: isGitHubLink(url) });
-        }
+        console.log('Link clicked:', { url, isGitHub: isGitHubLink(url), title });
         // GitHub links open GitHub info modal, everything else opens iframe modal
         if (isGitHubLink(url)) {
             openGitHubModal(url);

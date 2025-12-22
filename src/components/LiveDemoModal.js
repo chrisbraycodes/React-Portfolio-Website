@@ -157,12 +157,27 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
     if (isOpen && url) {
       setIframeError(false);
       setLoading(true);
+      
+      // Debug logging
+      if (process.env.NODE_ENV === 'development') {
+        console.log('LiveDemoModal URL:', url);
+      }
+      
+      // Set a timeout to detect if iframe never loads (10 seconds)
+      const timeoutId = setTimeout(() => {
+        if (loading) {
+          console.warn('Iframe loading timeout for:', url);
+          // Don't automatically set error, as some sites take time to load
+        }
+      }, 10000);
+      
+      return () => clearTimeout(timeoutId);
     } else if (!isOpen) {
       // Reset states when modal closes
       setIframeError(false);
       setLoading(true);
     }
-  }, [isOpen, url]);
+  }, [isOpen, url, loading]);
 
   useEffect(() => {
     // Prevent body scroll when modal is open
@@ -200,6 +215,27 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
   const handleIframeLoad = () => {
     // Iframe loaded - hide loading indicator
     setLoading(false);
+    
+    // Check if iframe was redirected to a different domain
+    try {
+      const iframe = document.querySelector(`iframe[src="${url}"]`);
+      if (iframe && iframe.contentWindow) {
+        try {
+          const iframeLocation = iframe.contentWindow.location.href;
+          // Check if the iframe was redirected to chrisbraycodes.com or a different domain
+          if (iframeLocation && !iframeLocation.includes(new URL(url).hostname)) {
+            console.warn('Iframe was redirected:', iframeLocation);
+            // Don't set error immediately, as some redirects might be expected
+          }
+        } catch (e) {
+          // Cross-origin restrictions - this is normal for external sites
+          // The iframe loaded, which is what matters
+        }
+      }
+    } catch (e) {
+      // Error checking iframe location - continue normally
+    }
+    
     setIframeError(false);
   };
 
@@ -208,16 +244,19 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
     onClose();
   };
 
+  // Debug logging
+  useEffect(() => {
+    if (isOpen && url) {
+      console.log('LiveDemoModal opened with URL:', url);
+      console.log('Expected domain:', new URL(url).hostname);
+    }
+  }, [isOpen, url]);
+
   if (!isOpen || !url) return null;
 
   // Ensure document.body exists before creating portal
   if (typeof document === 'undefined' || !document.body) {
     return null;
-  }
-
-  // Debug logging (remove in production if needed)
-  if (process.env.NODE_ENV === 'development') {
-    console.log('LiveDemoModal rendering:', { isOpen, url, title, iframeError, loading });
   }
 
   const modalContent = (
@@ -251,10 +290,11 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
                 </ErrorMessage>
               )}
               <DemoIframe
+                key={url}
                 src={url}
                 title={title || 'Live Demo'}
                 allow="fullscreen"
-                sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation allow-modals"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation allow-modals allow-presentation"
                 onError={handleIframeError}
                 onLoad={handleIframeLoad}
                 onLoadStart={() => {
@@ -266,8 +306,8 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
                   opacity: loading ? 0 : 1,
                   transition: 'opacity 0.3s ease'
                 }}
-                // Add referrerPolicy to help with some CORS issues
                 referrerPolicy="no-referrer-when-downgrade"
+                loading="lazy"
               />
             </>
           )}
