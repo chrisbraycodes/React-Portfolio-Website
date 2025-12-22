@@ -177,9 +177,10 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
             if (iframe) {
               try {
                 // Try to access iframe content to see if it loaded
-                iframe.contentWindow && iframe.contentWindow.document;
-                // If we can access it, it loaded successfully
-                return false;
+                if (iframe.contentWindow && iframe.contentWindow.document) {
+                  // If we can access it, it loaded successfully
+                  return false;
+                }
               } catch (e) {
                 // Cross-origin - this is normal, iframe likely loaded
                 // Don't set error, just stop showing loading
