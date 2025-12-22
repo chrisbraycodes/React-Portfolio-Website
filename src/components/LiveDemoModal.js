@@ -163,37 +163,52 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
       setLoading(true);
       
       // Debug logging
-      if (process.env.NODE_ENV === 'development') {
-        console.log('LiveDemoModal URL:', url);
-      }
+      console.log('LiveDemoModal URL:', url);
       
-      // Set a timeout to detect if iframe never loads (15 seconds)
-      const timeoutId = setTimeout(() => {
+      // For production: Auto-hide loading after 3 seconds for cross-origin iframes
+      // Cross-origin iframes often don't fire onLoad reliably in production
+      const quickTimeoutId = setTimeout(() => {
         setLoading((prevLoading) => {
           if (prevLoading) {
-            console.warn('Iframe loading timeout for:', url);
-            // Check if iframe actually loaded but onLoad didn't fire
+            // Check if iframe exists and is in DOM
             const iframe = document.querySelector(`iframe[src="${url}"]`);
             if (iframe) {
               try {
-                // Try to access iframe content to see if it loaded
+                // Try to access iframe content
                 if (iframe.contentWindow && iframe.contentWindow.document) {
-                  // If we can access it, it loaded successfully
+                  // Same-origin - can check, iframe loaded
                   return false;
                 }
               } catch (e) {
-                // Cross-origin - this is normal, iframe likely loaded
-                // Don't set error, just stop showing loading
+                // Cross-origin - assume loaded (common in production)
+                // Hide loading indicator since we can't detect load state
+                console.log('Cross-origin iframe detected, assuming loaded:', url);
                 return false;
               }
             }
+            // Iframe not found yet, keep loading
             return prevLoading;
           }
           return prevLoading;
         });
-      }, 15000);
+      }, 3000); // 3 second timeout for production
       
-      return () => clearTimeout(timeoutId);
+      // Longer timeout as fallback (10 seconds)
+      const fallbackTimeoutId = setTimeout(() => {
+        setLoading((prevLoading) => {
+          if (prevLoading) {
+            console.warn('Iframe loading fallback timeout for:', url);
+            // Assume loaded even if we can't detect it
+            return false;
+          }
+          return prevLoading;
+        });
+      }, 10000);
+      
+      return () => {
+        clearTimeout(quickTimeoutId);
+        clearTimeout(fallbackTimeoutId);
+      };
     } else if (!isOpen) {
       // Reset states when modal closes
       setIframeError(false);
@@ -326,10 +341,10 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
                 }}
                 style={{ 
                   display: 'block',
-                  opacity: loading ? 0.3 : 1,
-                  transition: 'opacity 0.5s ease',
+                  opacity: loading ? 0.5 : 1,
+                  transition: 'opacity 0.3s ease',
                   zIndex: 2,
-                  pointerEvents: loading ? 'none' : 'auto'
+                  pointerEvents: 'auto'
                 }}
                 referrerPolicy="no-referrer-when-downgrade"
               />
