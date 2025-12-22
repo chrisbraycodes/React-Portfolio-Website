@@ -163,11 +163,11 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
       setLoading(true);
       
       // For cross-origin iframes in production, onLoad may not fire reliably
-      // Hide loading indicator after a short delay to show content
+      // Hide loading indicator quickly so iframe is visible immediately
       // NOTE: This timeout only hides the loading indicator - the modal stays open until user closes it
       const loadingTimeoutId = setTimeout(() => {
         setLoading(false);
-      }, 2000); // 2 seconds - hide loading indicator for cross-origin iframes that don't fire onLoad
+      }, 1000); // 1 second - quickly hide loading so iframe content is visible
       
       return () => clearTimeout(loadingTimeoutId);
     } else if (!isOpen) {
@@ -258,7 +258,7 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
           ) : (
             <>
               {loading && (
-                <ErrorMessage theme={theme} style={{ position: 'absolute', zIndex: 1 }}>
+                <ErrorMessage theme={theme} style={{ position: 'absolute', zIndex: 1, pointerEvents: 'none' }}>
                   <ErrorText theme={theme}>Loading...</ErrorText>
                 </ErrorMessage>
               )}
@@ -266,8 +266,8 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
                 key={url}
                 src={url}
                 title={title || 'Live Demo'}
-                allow="fullscreen; autoplay; camera; microphone; geolocation; payment"
-                sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation allow-modals allow-presentation allow-downloads"
+                allow="fullscreen; autoplay; camera; microphone; geolocation; payment; clipboard-read; clipboard-write"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation allow-modals allow-presentation allow-downloads allow-popups-to-escape-sandbox"
                 onError={handleIframeError}
                 onLoad={handleIframeLoad}
                 onLoadStart={() => {
@@ -276,10 +276,10 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
                 }}
                 style={{ 
                   display: 'block',
-                  opacity: loading ? 0.5 : 1,
-                  transition: 'opacity 0.3s ease',
+                  opacity: 1,
                   zIndex: 2,
-                  pointerEvents: 'auto'
+                  pointerEvents: 'auto',
+                  visibility: 'visible'
                 }}
                 referrerPolicy="no-referrer-when-downgrade"
               />
