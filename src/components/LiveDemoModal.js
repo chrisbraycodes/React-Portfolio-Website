@@ -157,15 +157,6 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
     if (isOpen && url) {
       setIframeError(false);
       setLoading(true);
-      
-      // Set a timeout to detect if iframe fails to load
-      const timeout = setTimeout(() => {
-        // If still loading after 5 seconds, likely blocked or slow
-        setIframeError(true);
-        setLoading(false);
-      }, 5000);
-      
-      return () => clearTimeout(timeout);
     } else if (!isOpen) {
       // Reset states when modal closes
       setIframeError(false);
