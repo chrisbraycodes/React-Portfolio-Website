@@ -130,7 +130,7 @@ const Projects = () => {
             description: `A comprehensive character exploration tool featuring character search, random character discovery, episodes display, location details, status filters, and an animated space background. Built using the Rick and Morty API.`,
             link: 'https://github.com/chrisbraycodes/RIck-and-Morty-Fetch-Web-API-Char-Gen',
             imageSrc: '/rick-and-morty-small.jpg', // TODO: Add Rick and Morty project image (space laser gun theme)
-            liveDemoLink: 'https://chrisbraycodes.com/rickandmorty/',
+            liveDemoLink: 'https://rickandmortyapishowcaase.vercel.app/',
             liveDemoText: 'Live Demo',
             languages: ['HTML', 'CSS', 'JavaScript', 'Web API'],
         },
