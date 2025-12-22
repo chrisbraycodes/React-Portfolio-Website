@@ -121,7 +121,7 @@ const Projects = () => {
             description: `A modern bookshelf app that lets users search for books, organize them into shelves, and persist selections. Features Google Books API integration, Firebase authentication, user accounts, book details pages, and fully responsive design.`,
             link: 'https://github.com/chrisbraycodes/My-Reads',
             imageSrc: '/my reads small.jpg',
-            liveDemoLink: 'https://my-reads-blush.vercel.app/user/Sa5k2YkdBeboba7xhp2tToix22O2',
+            liveDemoLink: 'https://chrisbraycodes.com/myreads/user/Sa5k2YkdBeboba7xhp2tToix22O2',
             liveDemoText: 'Live Demo',
             languages: ['React', 'Redux', 'JavaScript', 'CSS', 'Firebase', 'Firestore', 'Google Books API', 'React Router'],
         },
@@ -130,7 +130,7 @@ const Projects = () => {
             description: `A comprehensive character exploration tool featuring character search, random character discovery, episodes display, location details, status filters, and an animated space background. Built using the Rick and Morty API.`,
             link: 'https://github.com/chrisbraycodes/RIck-and-Morty-Fetch-Web-API-Char-Gen',
             imageSrc: '/rick-and-morty-small.jpg', // TODO: Add Rick and Morty project image (space laser gun theme)
-            liveDemoLink: 'https://rickandmortyapishowcaase.vercel.app/',
+            liveDemoLink: 'https://chrisbraycodes.com/rickandmorty/',
             liveDemoText: 'Live Demo',
             languages: ['HTML', 'CSS', 'JavaScript', 'Web API'],
         },
