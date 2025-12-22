@@ -162,53 +162,14 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
       setIframeError(false);
       setLoading(true);
       
-      // Debug logging
-      console.log('LiveDemoModal URL:', url);
+      // For cross-origin iframes in production, onLoad may not fire reliably
+      // Hide loading indicator after a short delay to show content
+      // NOTE: This timeout only hides the loading indicator - the modal stays open until user closes it
+      const loadingTimeoutId = setTimeout(() => {
+        setLoading(false);
+      }, 2000); // 2 seconds - hide loading indicator for cross-origin iframes that don't fire onLoad
       
-      // For production: Auto-hide loading after 3 seconds for cross-origin iframes
-      // Cross-origin iframes often don't fire onLoad reliably in production
-      const quickTimeoutId = setTimeout(() => {
-        setLoading((prevLoading) => {
-          if (prevLoading) {
-            // Check if iframe exists and is in DOM
-            const iframe = document.querySelector(`iframe[src="${url}"]`);
-            if (iframe) {
-              try {
-                // Try to access iframe content
-                if (iframe.contentWindow && iframe.contentWindow.document) {
-                  // Same-origin - can check, iframe loaded
-                  return false;
-                }
-              } catch (e) {
-                // Cross-origin - assume loaded (common in production)
-                // Hide loading indicator since we can't detect load state
-                console.log('Cross-origin iframe detected, assuming loaded:', url);
-                return false;
-              }
-            }
-            // Iframe not found yet, keep loading
-            return prevLoading;
-          }
-          return prevLoading;
-        });
-      }, 3000); // 3 second timeout for production
-      
-      // Longer timeout as fallback (10 seconds)
-      const fallbackTimeoutId = setTimeout(() => {
-        setLoading((prevLoading) => {
-          if (prevLoading) {
-            console.warn('Iframe loading fallback timeout for:', url);
-            // Assume loaded even if we can't detect it
-            return false;
-          }
-          return prevLoading;
-        });
-      }, 10000);
-      
-      return () => {
-        clearTimeout(quickTimeoutId);
-        clearTimeout(fallbackTimeoutId);
-      };
+      return () => clearTimeout(loadingTimeoutId);
     } else if (!isOpen) {
       // Reset states when modal closes
       setIframeError(false);
@@ -250,31 +211,12 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
   };
 
   const handleIframeLoad = () => {
-    // Iframe loaded - hide loading indicator
+    // Iframe loaded - hide loading indicator immediately
     setLoading(false);
     setIframeError(false);
     
-    // Check if iframe was redirected to a different domain
-    try {
-      const iframe = document.querySelector(`iframe[src="${url}"]`);
-      if (iframe && iframe.contentWindow) {
-        try {
-          const iframeLocation = iframe.contentWindow.location.href;
-          // Check if the iframe was redirected to chrisbraycodes.com or a different domain
-          if (iframeLocation && !iframeLocation.includes(new URL(url).hostname)) {
-            console.warn('Iframe was redirected:', iframeLocation);
-            // Don't set error immediately, as some redirects might be expected
-          }
-        } catch (e) {
-          // Cross-origin restrictions - this is normal for external sites
-          // The iframe loaded, which is what matters
-          console.log('Iframe loaded successfully (cross-origin restrictions prevent location check)');
-        }
-      }
-    } catch (e) {
-      // Error checking iframe location - continue normally
-      console.log('Iframe loaded successfully');
-    }
+    // Note: Modal stays open - user can interact with iframe as long as they want
+    // This function only hides the loading indicator
   };
 
   const handleOpenInNewTab = () => {
@@ -282,13 +224,6 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
     onClose();
   };
 
-  // Debug logging
-  useEffect(() => {
-    if (isOpen && url) {
-      console.log('LiveDemoModal opened with URL:', url);
-      console.log('Expected domain:', new URL(url).hostname);
-    }
-  }, [isOpen, url]);
 
   if (!isOpen || !url) return null;
 
