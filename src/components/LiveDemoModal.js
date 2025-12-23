@@ -63,6 +63,36 @@ const ModalTitle = styled.h2`
   font-weight: 600;
 `;
 
+const HeaderButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const OpenButton = styled.button`
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.text};
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+
+  &:hover {
+    background: ${({ theme }) => theme.linkHover};
+    color: ${({ theme }) => theme.body};
+  }
+
+  svg {
+    font-size: 0.9rem;
+  }
+`;
+
 const CloseButton = styled.button`
   background: none;
   border: none;
@@ -224,6 +254,11 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
     onClose();
   };
 
+  const handleOpenInNewTabFromHeader = () => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+    // Don't close modal - let user continue viewing in iframe if they want
+  };
+
 
   if (!isOpen || !url) return null;
 
@@ -237,9 +272,15 @@ const LiveDemoModal = ({ isOpen, onClose, url, title, theme }) => {
       <ModalContainer theme={theme} onClick={(e) => e.stopPropagation()}>
         <ModalHeader theme={theme}>
           <ModalTitle theme={theme}>{title || 'Live Demo'}</ModalTitle>
-          <CloseButton theme={theme} onClick={onClose} aria-label="Close modal">
-            <FaTimes />
-          </CloseButton>
+          <HeaderButtonGroup>
+            <OpenButton theme={theme} onClick={handleOpenInNewTabFromHeader} aria-label="Open in new tab">
+              <span>Open</span>
+              <FaExternalLinkAlt />
+            </OpenButton>
+            <CloseButton theme={theme} onClick={onClose} aria-label="Close modal">
+              <FaTimes />
+            </CloseButton>
+          </HeaderButtonGroup>
         </ModalHeader>
         <IframeContainer>
           {iframeError ? (
