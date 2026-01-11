@@ -393,15 +393,10 @@ const GitHubProfileModal = ({ isOpen, onClose, username, theme }) => {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
-  // Use GitHub's actual contribution graph with dates/months
-  // The github-contributions-api shows the same data as GitHub with dates
+  // Use GitHub's actual contribution graph with dates/months visible
+  // Using github-contributions-api which shows dates corresponding to the green boxes
   const contributionGraphUrl = username 
     ? `https://github-contributions-api.deno.dev/${username}.svg`
-    : null;
-  
-  // GitHub's actual contribution graph page with dates and months (for iframe or link)
-  const githubContributionsPage = username 
-    ? `https://github.com/users/${username}/contributions`
     : null;
 
   if (!isOpen || !username) return null;
@@ -501,70 +496,23 @@ const GitHubProfileModal = ({ isOpen, onClose, username, theme }) => {
 
               {contributionGraphUrl && (
                 <ContributionGraph theme={theme}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                    <GraphTitle theme={theme}>Contribution Activity</GraphTitle>
-                    {githubContributionsPage && (
-                      <a 
-                        href={githubContributionsPage} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        style={{ 
-                          color: theme.linkHover, 
-                          textDecoration: 'none',
-                          fontSize: '0.9rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.25rem'
-                        }}
-                      >
-                        View on GitHub
-                        <FaExternalLinkAlt style={{ fontSize: '0.75rem' }} />
-                      </a>
-                    )}
-                  </div>
-                  {/* Show GitHub's contribution graph with dates/months */}
-                  {/* Using github-contributions-api which mirrors GitHub's exact data with dates */}
+                  <GraphTitle theme={theme}>Contribution Activity</GraphTitle>
+                  {/* Show GitHub's contribution graph with dates/months visible */}
+                  {/* The SVG includes dates corresponding to the green boxes, with some dates omitted to fit */}
                   <GraphImage 
                     src={contributionGraphUrl} 
-                    alt="GitHub contribution graph - shows your actual GitHub activity with dates and months"
+                    alt="GitHub contribution graph - shows your actual GitHub activity with dates"
                     style={{
                       width: '100%',
                       height: 'auto',
-                      backgroundColor: theme.mode === 'dark' ? '#0d1117' : '#ffffff'
+                      backgroundColor: theme.mode === 'dark' ? '#0d1117' : '#ffffff',
+                      display: 'block'
                     }}
                     onError={(e) => {
                       console.error('Contribution graph image failed to load');
                       e.target.style.display = 'none';
                     }}
                   />
-                  <div style={{ 
-                    marginTop: '1rem',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    fontSize: '0.85rem',
-                    color: theme.text,
-                    opacity: 0.7
-                  }}>
-                    <span>Shows your actual GitHub contribution activity</span>
-                    {githubContributionsPage && (
-                      <a 
-                        href={githubContributionsPage} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        style={{ 
-                          color: theme.linkHover, 
-                          textDecoration: 'none',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.25rem'
-                        }}
-                      >
-                        View full graph with dates
-                        <FaExternalLinkAlt style={{ fontSize: '0.75rem' }} />
-                      </a>
-                    )}
-                  </div>
                 </ContributionGraph>
               )}
 
