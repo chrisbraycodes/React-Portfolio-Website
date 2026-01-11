@@ -4,6 +4,8 @@ import { FaGithub, FaLinkedin, FaFilePdf } from 'react-icons/fa';
 import GlobalStyles from '../styles/GlobalStyles';
 import { lightTheme, darkTheme } from '../theme';
 import ResumeModal from './ResumeModal';
+import GitHubProfileModal from './GitHubProfileModal';
+import LinkedInProfileModal from './LinkedInProfileModal';
 
 // Animation for header background
 const fibonacciLight = keyframes`
@@ -149,10 +151,17 @@ const IconContainer = styled.div`
   }
 `;
 
-const IconLink = styled.a`
+const IconLink = styled.button`
   font-size: 1.5rem;
   color: ${({ theme }) => theme.text};  // Color of icons based on theme
   transition: transform 0.3s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     transform: scale(1.2);
@@ -318,6 +327,8 @@ const Nav = styled.nav`
 const Header = ({ toggleTheme, isDarkMode }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [resumeModalOpen, setResumeModalOpen] = useState(false);
+  const [githubModalOpen, setGithubModalOpen] = useState(false);
+  const [linkedInModalOpen, setLinkedInModalOpen] = useState(false);
   const currentTheme = isDarkMode ? darkTheme : lightTheme;
 
   return (
@@ -331,10 +342,10 @@ const Header = ({ toggleTheme, isDarkMode }) => {
               </Logo>
             </LogoContainer>
         <IconContainer>
-          <IconLink href="https://github.com/chrisbraycodes" target="_blank" rel="noopener noreferrer">
+          <IconLink onClick={() => setGithubModalOpen(true)} title="View GitHub Profile">
             <FaGithub />
           </IconLink>
-          <IconLink href="https://linkedin.com/in/chrisbraycodes" target="_blank" rel="noopener noreferrer">
+          <IconLink onClick={() => setLinkedInModalOpen(true)} title="View LinkedIn Profile">
             <FaLinkedin />
           </IconLink>
           <ResumeButton onClick={() => setResumeModalOpen(true)} title="View Resume">
@@ -356,6 +367,18 @@ const Header = ({ toggleTheme, isDarkMode }) => {
       <ResumeModal 
         isOpen={resumeModalOpen} 
         onClose={() => setResumeModalOpen(false)} 
+        theme={currentTheme}
+      />
+      <GitHubProfileModal
+        isOpen={githubModalOpen}
+        onClose={() => setGithubModalOpen(false)}
+        username="chrisbraycodes"
+        theme={currentTheme}
+      />
+      <LinkedInProfileModal
+        isOpen={linkedInModalOpen}
+        onClose={() => setLinkedInModalOpen(false)}
+        profileUrl="https://www.linkedin.com/in/chrisbraycodes/"
         theme={currentTheme}
       />
     </ThemeProvider>

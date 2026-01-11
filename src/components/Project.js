@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { useTheme } from 'styled-components';
+import LiveDemoModal from './LiveDemoModal';
+import GitHubInfoModal from './GitHubInfoModal';
 
 const ProjectCard = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: theme.body;
+    background: ${({ theme }) => theme.body};
     width: 250px;
     padding: 1rem;
-    border: 1px solid theme.border;
+    border: 1px solid ${({ theme }) => theme.border};
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -78,7 +81,7 @@ const FeaturedProjectImage = styled.img`
 
 const ProjectTitle = styled.h3`
     font-size: 1.2rem;
-    color: theme.text;
+    color: ${({ theme }) => theme.text};
     margin: 0.5rem 0;
     text-align: center;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6); // Shadow for better readability
@@ -86,7 +89,7 @@ const ProjectTitle = styled.h3`
 
 const FeaturedProjectTitle = styled.h3`
     font-size: 2rem;
-    color: theme.text;
+    color: ${({ theme }) => theme.text};
     margin: 0.5rem 0;
     text-align: center;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
@@ -95,7 +98,7 @@ const FeaturedProjectTitle = styled.h3`
 
 const ProjectDescription = styled.p`
     font-size: 0.9rem;
-    color: theme.text;
+    color: ${({ theme }) => theme.text};
     line-height: 1.5;
     text-align: center;
     margin-bottom: 1rem;
@@ -103,7 +106,7 @@ const ProjectDescription = styled.p`
 
 const FeaturedProjectDescription = styled.p`
     font-size: 1.1rem;
-    color: theme.text;
+    color: ${({ theme }) => theme.text};
     line-height: 1.6;
     text-align: center;
     margin-bottom: 1.5rem;
@@ -117,8 +120,8 @@ const ProjectLinkButton = styled.button`
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
     font-weight: bold;
-    color: theme.body;
-    background: theme.linkHover;
+    color: ${({ theme }) => theme.body};
+    background: ${({ theme }) => theme.linkHover};
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -126,8 +129,8 @@ const ProjectLinkButton = styled.button`
     transition: background 0.3s ease, transform 0.2s ease-in-out;
 
     &:hover {
-        background: theme.text;
-        color: theme.body;
+        background: ${({ theme }) => theme.text};
+        color: ${({ theme }) => theme.body};
         transform: scale(1.1);
     }
 
@@ -136,59 +139,163 @@ const ProjectLinkButton = styled.button`
     }
 `;
 
-const Project = ({ title, description, link, imageSrc, buttonText = "View on GitHub", icon: Icon = FaGithub, liveDemoLink, liveDemoText = "Live Demo", isFeatured = false }) => {
-    const openNewWindow = (url) => {
+const LanguagesList = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    justify-content: center;
+`;
+
+const LanguageTag = styled.span`
+    background: ${({ theme }) => theme.linkHover};
+    color: ${({ theme }) => theme.body};
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+`;
+
+const Project = ({ title, description, link, imageSrc, buttonText = "View on GitHub", icon: Icon = FaGithub, liveDemoLink, liveDemoText = "Live Demo", isFeatured = false, languages = [], projectId }) => {
+    const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+    const [isGitHubModalOpen, setIsGitHubModalOpen] = useState(false);
+    const [modalUrl, setModalUrl] = useState('');
+    const [githubUrl, setGithubUrl] = useState('');
+    const theme = useTheme();
+
+    // Check if URL is a GitHub link
+    const isGitHubLink = (url) => {
+        return url && (url.includes('github.com') || url.includes('github.io'));
+    };
+
+    const openModal = (url) => {
         if (url) {
-            window.open(url, '_blank', 'noopener,noreferrer');
+            console.log('Opening modal with URL:', url);
+            setModalUrl(url);
+            setIsDemoModalOpen(true);
+        }
+    };
+
+    const openGitHubModal = (url) => {
+        if (url) {
+            setGithubUrl(url);
+            setIsGitHubModalOpen(true);
+        }
+    };
+
+    const handleLinkClick = (e, url) => {
+        e.preventDefault();
+        e.stopPropagation();
+        // Debug logging
+        console.log('Link clicked:', { url, isGitHub: isGitHubLink(url), title });
+        // GitHub links open GitHub info modal, everything else opens iframe modal
+        if (isGitHubLink(url)) {
+            openGitHubModal(url);
         } else {
-            console.error('No link provided for this project.');
+            openModal(url);
         }
     };
 
     if (isFeatured) {
         return (
-            <FeaturedProjectCard>
+            <FeaturedProjectCard id={projectId}>
                 {imageSrc && <FeaturedProjectImage src={imageSrc} alt={`${title} thumbnail`} />}
                 <FeaturedProjectTitle>{title}</FeaturedProjectTitle>
                 <FeaturedProjectDescription>{description}</FeaturedProjectDescription>
+                {languages && languages.length > 0 && (
+                    <LanguagesList>
+                        {languages.map((lang, index) => (
+                            <LanguageTag key={index}>{lang}</LanguageTag>
+                        ))}
+                    </LanguagesList>
+                )}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%', maxWidth: '400px' }}>
                     {link && (
-                        <ProjectLinkButton onClick={() => openNewWindow(link)}>
+                        <ProjectLinkButton type="button" onClick={(e) => handleLinkClick(e, link)}>
                             <Icon />
                             {buttonText}
                         </ProjectLinkButton>
                     )}
                     {liveDemoLink && (
-                        <ProjectLinkButton onClick={() => openNewWindow(liveDemoLink)}>
+                        <ProjectLinkButton type="button" onClick={(e) => handleLinkClick(e, liveDemoLink)}>
                             <FaExternalLinkAlt />
                             {liveDemoText}
                         </ProjectLinkButton>
                     )}
                 </div>
+                <LiveDemoModal
+                    isOpen={isDemoModalOpen}
+                    onClose={() => {
+                        setIsDemoModalOpen(false);
+                        setModalUrl('');
+                    }}
+                    url={modalUrl}
+                    title={title}
+                    theme={theme}
+                />
+                <GitHubInfoModal
+                    isOpen={isGitHubModalOpen}
+                    onClose={() => {
+                        setIsGitHubModalOpen(false);
+                        setGithubUrl('');
+                    }}
+                    githubUrl={githubUrl}
+                    theme={theme}
+                />
             </FeaturedProjectCard>
         );
     }
 
     return (
-        <ProjectCard>
-            {imageSrc && <ProjectImage src={imageSrc} alt={`${title} thumbnail`} />}
-            <ProjectTitle>{title}</ProjectTitle>
-            <ProjectDescription>{description}</ProjectDescription>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
-                {link && (
-                    <ProjectLinkButton onClick={() => openNewWindow(link)}>
-                        <Icon />
-                        {buttonText}
-                    </ProjectLinkButton>
+        <>
+            <ProjectCard id={projectId}>
+                {imageSrc && <ProjectImage src={imageSrc} alt={`${title} thumbnail`} />}
+                <ProjectTitle>{title}</ProjectTitle>
+                <ProjectDescription>{description}</ProjectDescription>
+                {languages && languages.length > 0 && (
+                    <LanguagesList>
+                        {languages.map((lang, index) => (
+                            <LanguageTag key={index}>{lang}</LanguageTag>
+                        ))}
+                    </LanguagesList>
                 )}
-                {liveDemoLink && (
-                    <ProjectLinkButton onClick={() => openNewWindow(liveDemoLink)}>
-                        <FaExternalLinkAlt />
-                        {liveDemoText}
-                    </ProjectLinkButton>
-                )}
-            </div>
-        </ProjectCard>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
+                    {link && (
+                        <ProjectLinkButton type="button" onClick={(e) => handleLinkClick(e, link)}>
+                            <Icon />
+                            {buttonText}
+                        </ProjectLinkButton>
+                    )}
+                    {liveDemoLink && (
+                        <ProjectLinkButton type="button" onClick={(e) => handleLinkClick(e, liveDemoLink)}>
+                            <FaExternalLinkAlt />
+                            {liveDemoText}
+                        </ProjectLinkButton>
+                    )}
+                </div>
+            </ProjectCard>
+            <LiveDemoModal
+                isOpen={isDemoModalOpen}
+                onClose={() => {
+                    setIsDemoModalOpen(false);
+                    setModalUrl('');
+                }}
+                url={modalUrl}
+                title={title}
+                theme={theme}
+            />
+            <GitHubInfoModal
+                isOpen={isGitHubModalOpen}
+                onClose={() => {
+                    setIsGitHubModalOpen(false);
+                    setGithubUrl('');
+                }}
+                githubUrl={githubUrl}
+                theme={theme}
+            />
+        </>
     );
 };
 
