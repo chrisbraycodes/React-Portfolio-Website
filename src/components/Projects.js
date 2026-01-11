@@ -77,6 +77,15 @@ const RegularProjectsSection = styled.div`
     justify-items: center;
 `;
 
+// Helper function to convert project title to ID
+const getProjectId = (title) => {
+    return title.toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim();
+};
+
 // Projects component displaying a list of projects
 const Projects = () => {
 
@@ -87,9 +96,28 @@ const Projects = () => {
         imageSrc: '/unfinished-work-featured.png',
         buttonText: 'Visit Website',
         icon: FaExternalLinkAlt,
+        languages: ['React Native', 'Expo', 'TypeScript', 'JavaScript', 'Firebase', 'Firestore', 'OpenAI API', 'DALL-E 3', 'Apple StoreKit', 'Cloud Functions'],
     };
 
     const regularProjects = [
+        {
+            title: 'MyReads – Book Tracking App',
+            description: `A modern bookshelf app that lets users search for books, organize them into shelves, and persist selections. Features Google Books API integration, Firebase authentication, user accounts, book details pages, and fully responsive design.`,
+            link: 'https://github.com/chrisbraycodes/My-Reads',
+            imageSrc: '/my reads small.jpg',
+            liveDemoLink: 'https://my-reads-blush.vercel.app',
+            liveDemoText: 'Live Demo',
+            languages: ['React', 'Redux', 'JavaScript', 'CSS', 'Firebase', 'Firestore', 'Google Books API', 'React Router'],
+        },
+        {
+            title: 'Rick and Morty Character Explorer',
+            description: `A comprehensive character exploration tool featuring character search, random character discovery, episodes display, location details, status filters, and an animated space background. Built using the Rick and Morty API.`,
+            link: 'https://github.com/chrisbraycodes/RIck-and-Morty-Fetch-Web-API-Char-Gen',
+            imageSrc: '/rick-and-morty-small.jpg', // TODO: Add Rick and Morty project image (space laser gun theme)
+            liveDemoLink: 'https://rickandmortyapishowcaase.vercel.app/',
+            liveDemoText: 'Live Demo',
+            languages: ['HTML', 'CSS', 'JavaScript', 'Web API'],
+        },
         {
             title: 'Text Classification Pipeline (NLP, Flask, ML)',
             description: `End-to-end machine learning pipeline using Python, spaCy, and logistic regression to classify product reviews. 
@@ -98,21 +126,15 @@ const Projects = () => {
             imageSrc: '/pipeline small.jpg',
             liveDemoLink: 'https://nbviewer.org/github/chrisbraycodes/nlp-product-review-classifier/blob/master/starter/starter.ipynb',
             liveDemoText: 'View Notebook',
+            languages: ['Python', 'Pandas', 'Flask', 'spaCy', 'scikit-learn', 'NLP', 'Machine Learning'],
         },
         {
-            title: 'MyReads – Book Tracking App (React)',
-            description: `Developed a React app for managing personal book collections using the Google Books API. 
-            Focused on component optimization, search latency reduction, and persistent state via localStorage.`,
-            link: 'https://github.com/chrisbraycodes/My-Reads',
-            imageSrc: '/my reads small.jpg',
-            liveDemoLink: 'https://my-reads-blush.vercel.app/',
-        },
-        {
-            title: 'InfoRomantic – iOS Dating App (Swift + Firebase)',
+            title: 'InfoRomantic – iOS Dating App',
             description: `Designed and developed a native iOS app for profile matching, using Firebase Auth, Firestore, and 
             dynamic layout features in Swift. Achieved 92% setup completion across 1,000+ simulations.`,
             link: 'https://github.com/chrisbraycodes/InfoRomantic-iOS-Dating-App-Using-Swift',
             imageSrc: '/infoRom small.jpg',
+            languages: ['Swift', 'iOS', 'Firebase', 'Firestore', 'UIKit'],
         },
         {
             title: 'chrisbraycodes.com – Portfolio Website',
@@ -120,6 +142,7 @@ const Projects = () => {
             Features animations, theme toggling, and clean layout optimized for hiring managers.`,
             link: 'https://github.com/chrisbraycodes/React-Portfolio-Website',
             imageSrc: '/React Portfolio Small.jpg',
+            languages: ['React', 'JavaScript', 'TypeScript', 'Styled Components', 'CSS'],
         },
     ];
 
@@ -135,6 +158,8 @@ const Projects = () => {
                     buttonText={featuredProject.buttonText}
                     icon={featuredProject.icon}
                     isFeatured={true}
+                    languages={featuredProject.languages}
+                    projectId={getProjectId(featuredProject.title)}
                 />
             </FeaturedSection>
             <RegularProjectsSection>
@@ -149,6 +174,8 @@ const Projects = () => {
                         icon={project.icon}
                         liveDemoLink={project.liveDemoLink}
                         liveDemoText={project.liveDemoText}
+                        languages={project.languages}
+                        projectId={getProjectId(project.title)}
                     />
                 ))}
             </RegularProjectsSection>
