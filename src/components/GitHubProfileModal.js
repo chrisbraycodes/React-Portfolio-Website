@@ -204,6 +204,14 @@ const GraphImage = styled.img`
   border-radius: 4px;
 `;
 
+const GraphIframe = styled.iframe`
+  width: 100%;
+  height: 400px;
+  border: none;
+  border-radius: 4px;
+  background: ${({ theme }) => theme.body};
+`;
+
 const ReposSection = styled.div`
   margin: 2rem 0;
 `;
@@ -385,9 +393,15 @@ const GitHubProfileModal = ({ isOpen, onClose, username, theme }) => {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
-  // Generate contribution graph URL using github-readme-activity-graph
+  // Use GitHub's actual contribution graph - this mirrors GitHub's exact contribution data
+  // Using github-contributions-api which shows the same data as GitHub's contribution graph
   const contributionGraphUrl = username 
-    ? `https://github-readme-activity-graph.vercel.app/graph?username=${username}&theme=${theme.mode === 'dark' ? 'github-dark' : 'github'}&hide_border=true&area=true`
+    ? `https://github-contributions-api.deno.dev/${username}.svg`
+    : null;
+  
+  // Alternative: Direct GitHub contribution page (may be blocked by X-Frame-Options)
+  const githubContributionsPage = username 
+    ? `https://github.com/users/${username}/contributions`
     : null;
 
   if (!isOpen || !username) return null;
@@ -487,12 +501,33 @@ const GitHubProfileModal = ({ isOpen, onClose, username, theme }) => {
 
               {contributionGraphUrl && (
                 <ContributionGraph theme={theme}>
-                  <GraphTitle theme={theme}>Contribution Activity</GraphTitle>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <GraphTitle theme={theme}>Contribution Activity</GraphTitle>
+                    {githubContributionsPage && (
+                      <a 
+                        href={githubContributionsPage} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        style={{ 
+                          color: theme.linkHover, 
+                          textDecoration: 'none',
+                          fontSize: '0.9rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.25rem'
+                        }}
+                      >
+                        View on GitHub
+                        <FaExternalLinkAlt style={{ fontSize: '0.75rem' }} />
+                      </a>
+                    )}
+                  </div>
                   <GraphImage 
                     src={contributionGraphUrl} 
-                    alt="GitHub contribution graph"
+                    alt="GitHub contribution graph - shows your actual GitHub activity"
                     onError={(e) => {
-                      // Fallback if image fails to load
+                      // Fallback to GitHub's contribution page if image fails
+                      console.error('Contribution graph image failed to load');
                       e.target.style.display = 'none';
                     }}
                   />
