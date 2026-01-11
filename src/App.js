@@ -60,7 +60,7 @@ const App = () => {
                     <Skills />
                     <Contact />
                 </main>
-                <Footer />
+                <Footer isDarkMode={isDarkMode} />
             </ThemeProvider>
         </RootLayout>
     );

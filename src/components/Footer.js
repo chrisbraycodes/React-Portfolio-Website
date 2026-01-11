@@ -1,5 +1,8 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import React, { useState } from 'react';
+import styled, { keyframes, ThemeProvider } from 'styled-components';
+import { lightTheme, darkTheme } from '../theme';
+import GitHubProfileModal from './GitHubProfileModal';
+import LinkedInProfileModal from './LinkedInProfileModal';
 
 // Wandering light animation for the background
 const fibonacciLight = keyframes`
@@ -37,7 +40,7 @@ const FooterContainer = styled.footer`
 `;
 
 // Styling for footer links
-const FooterLink = styled.a`
+const FooterLink = styled.button`
     color: #000;
     text-decoration: none;
     font-size: 1.2rem;
@@ -45,6 +48,10 @@ const FooterLink = styled.a`
     display: inline-block;
     transition: all 0.3s ease-in-out;
     text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.8);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
 
     &:hover {
         animation: ${pulse} 0.6s ease-in-out infinite; // Add pulse effect
@@ -54,13 +61,17 @@ const FooterLink = styled.a`
 `;
 
 // Styling for footer icons
-const FooterIcon = styled.a`
+const FooterIcon = styled.button`
     display: inline-block;
     margin: 0 1rem;
     font-size: 1.5rem;
     color: #000;
     text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.8);
     transition: all 0.3s ease-in-out;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
 
     &:hover {
         animation: ${pulse} 0.6s ease-in-out infinite; // Add pulse effect
@@ -70,26 +81,46 @@ const FooterIcon = styled.a`
 `;
 
 // Footer component with links and icons
-const Footer = () => (
-    <FooterContainer>
-        <p>
-            Built by Christopher Bray. Connect with me on{' '}
-            <FooterLink href="https://github.com/chrisbraycodes" target="_blank" rel="noopener noreferrer">
-                GitHub
-            </FooterLink>{' '}
-            and{' '}
-            <FooterLink href="https://www.linkedin.com/in/chrisbraycodes/" target="_blank" rel="noopener noreferrer">
-                LinkedIn
-            </FooterLink>
-            .
-        </p>
-        <FooterIcon href="https://github.com/chrisbraycodes" target="_blank" rel="noopener noreferrer">
-            <i className="fab fa-github"></i>
-        </FooterIcon>
-        <FooterIcon href="https://www.linkedin.com/in/chrisbraycodes/" target="_blank" rel="noopener noreferrer">
-            <i className="fab fa-linkedin"></i>
-        </FooterIcon>
-    </FooterContainer>
-);
+const Footer = ({ isDarkMode }) => {
+  const [githubModalOpen, setGithubModalOpen] = useState(false);
+  const [linkedInModalOpen, setLinkedInModalOpen] = useState(false);
+  const currentTheme = isDarkMode ? darkTheme : lightTheme;
+
+  return (
+    <ThemeProvider theme={currentTheme}>
+      <FooterContainer>
+          <p>
+              Built by Christopher Bray. Connect with me on{' '}
+              <FooterLink onClick={() => setGithubModalOpen(true)}>
+                  GitHub
+              </FooterLink>{' '}
+              and{' '}
+              <FooterLink onClick={() => setLinkedInModalOpen(true)}>
+                  LinkedIn
+              </FooterLink>
+              .
+          </p>
+          <FooterIcon onClick={() => setGithubModalOpen(true)}>
+              <i className="fab fa-github"></i>
+          </FooterIcon>
+          <FooterIcon onClick={() => setLinkedInModalOpen(true)}>
+              <i className="fab fa-linkedin"></i>
+          </FooterIcon>
+      </FooterContainer>
+      <GitHubProfileModal
+        isOpen={githubModalOpen}
+        onClose={() => setGithubModalOpen(false)}
+        username="chrisbraycodes"
+        theme={currentTheme}
+      />
+      <LinkedInProfileModal
+        isOpen={linkedInModalOpen}
+        onClose={() => setLinkedInModalOpen(false)}
+        profileUrl="https://www.linkedin.com/in/chrisbraycodes/"
+        theme={currentTheme}
+      />
+    </ThemeProvider>
+  );
+};
 
 export default Footer;
