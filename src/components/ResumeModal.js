@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { FaTimes, FaDownload, FaEye, FaFilePdf } from 'react-icons/fa';
+import { FaTimes, FaDownload, FaEye } from 'react-icons/fa';
 
 // Animation for modal appearance
 const fadeIn = keyframes`

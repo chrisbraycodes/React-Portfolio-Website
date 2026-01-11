@@ -42,20 +42,6 @@ const BackgroundContainer = styled.div`
     overflow: hidden;
 `;
 
-// Floating circle particle
-const FloatingCircle = styled.div`
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background-image: url('/circleNice.png?v=2');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    animation: ${float} ${({ duration }) => duration}s linear infinite;
-    left: ${({ left }) => left}%;
-    animation-delay: ${({ delay }) => delay}s;
-`;
-
 const Twinkle = styled.div`
     position: absolute;
     width: 2px;
