@@ -212,6 +212,27 @@ const GraphIframe = styled.iframe`
   background: ${({ theme }) => theme.body};
 `;
 
+const GraphContainer = styled.div`
+  position: relative;
+  width: 100%;
+  margin-top: 1rem;
+`;
+
+const MonthLabels = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  padding: 0 0.5rem;
+  font-size: 0.75rem;
+  color: ${({ theme }) => theme.text};
+  opacity: 0.8;
+`;
+
+const MonthLabel = styled.span`
+  flex: 1;
+  text-align: center;
+`;
+
 const ReposSection = styled.div`
   margin: 2rem 0;
 `;
@@ -317,6 +338,7 @@ const GitHubProfileModal = ({ isOpen, onClose, username, theme }) => {
   const [reposData, setReposData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
     if (isOpen && username) {
@@ -393,11 +415,71 @@ const GitHubProfileModal = ({ isOpen, onClose, username, theme }) => {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
-  // Use GitHub's actual contribution graph with dates/months visible
-  // Using github-contributions-api which shows dates corresponding to the green boxes
+  // Update current date periodically so labels stay current
+  useEffect(() => {
+    if (isOpen) {
+      // Update date every hour to keep labels current
+      const interval = setInterval(() => {
+        setCurrentDate(new Date());
+      }, 3600000); // Update every hour
+      
+      return () => clearInterval(interval);
+    }
+  }, [isOpen]);
+
+  // Calculate month labels for the contribution graph
+  // GitHub shows the last 53 weeks (371 days) of contributions
+  // This recalculates based on current date so it stays up to date
+  const getMonthLabels = () => {
+    const today = currentDate;
+    const startDate = new Date(today);
+    startDate.setDate(startDate.getDate() - 371); // 53 weeks ago
+    
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = [];
+    
+    // Get months in the range (approximately every 4-5 weeks)
+    let checkDate = new Date(startDate);
+    const endDate = new Date(today);
+    
+    // Add first month
+    months.push({
+      label: monthNames[checkDate.getMonth()],
+      year: checkDate.getFullYear(),
+      position: 0
+    });
+    
+    // Add months approximately every 4-5 weeks (every ~30 days)
+    let lastMonth = checkDate.getMonth();
+    let lastYear = checkDate.getFullYear();
+    
+    for (let day = 0; day <= 371; day += 30) {
+      const checkDate = new Date(startDate);
+      checkDate.setDate(checkDate.getDate() + day);
+      
+      if (checkDate <= endDate && (checkDate.getMonth() !== lastMonth || checkDate.getFullYear() !== lastYear)) {
+        const position = Math.floor((day / 371) * 100); // Position as percentage
+        months.push({
+          label: monthNames[checkDate.getMonth()],
+          year: checkDate.getFullYear(),
+          position: position
+        });
+        lastMonth = checkDate.getMonth();
+        lastYear = checkDate.getFullYear();
+      }
+    }
+    
+    return months;
+  };
+
+  // Use GitHub's actual contribution graph
+  // Add timestamp to force refresh as time passes
   const contributionGraphUrl = username 
-    ? `https://github-contributions-api.deno.dev/${username}.svg`
+    ? `https://github-contributions-api.deno.dev/${username}.svg?t=${Math.floor(currentDate.getTime() / 86400000)}`
     : null;
+  
+  // Recalculate month labels based on current date
+  const monthLabels = getMonthLabels();
 
   if (!isOpen || !username) return null;
 
@@ -498,21 +580,44 @@ const GitHubProfileModal = ({ isOpen, onClose, username, theme }) => {
                 <ContributionGraph theme={theme}>
                   <GraphTitle theme={theme}>Contribution Activity</GraphTitle>
                   {/* Show GitHub's contribution graph with dates/months visible */}
-                  {/* The SVG includes dates corresponding to the green boxes, with some dates omitted to fit */}
-                  <GraphImage 
-                    src={contributionGraphUrl} 
-                    alt="GitHub contribution graph - shows your actual GitHub activity with dates"
-                    style={{
-                      width: '100%',
-                      height: 'auto',
-                      backgroundColor: theme.mode === 'dark' ? '#0d1117' : '#ffffff',
-                      display: 'block'
-                    }}
-                    onError={(e) => {
-                      console.error('Contribution graph image failed to load');
-                      e.target.style.display = 'none';
-                    }}
-                  />
+                  <GraphContainer theme={theme}>
+                    <GraphImage 
+                      src={contributionGraphUrl} 
+                      alt="GitHub contribution graph - shows your actual GitHub activity with dates"
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        backgroundColor: theme.mode === 'dark' ? '#0d1117' : '#ffffff',
+                        display: 'block'
+                      }}
+                      onError={(e) => {
+                        console.error('Contribution graph image failed to load');
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                    {/* Add month labels below the graph */}
+                    <MonthLabels theme={theme}>
+                      {monthLabels.map((month, index) => {
+                        const showYear = index === 0 || (month.year !== monthLabels[index - 1]?.year);
+                        const isFirst = index === 0;
+                        const isLast = index === monthLabels.length - 1;
+                        
+                        return (
+                          <MonthLabel
+                            key={`${month.label}-${month.position}-${index}`}
+                            style={{
+                              textAlign: isFirst ? 'left' : isLast ? 'right' : 'center',
+                              flex: isFirst || isLast ? '0 0 auto' : '1',
+                              paddingLeft: isFirst ? '0' : '0.5rem',
+                              paddingRight: isLast ? '0' : '0.5rem'
+                            }}
+                          >
+                            {showYear && month.year !== new Date().getFullYear() ? `${month.label} '${String(month.year).slice(-2)}` : month.label}
+                          </MonthLabel>
+                        );
+                      })}
+                    </MonthLabels>
+                  </GraphContainer>
                 </ContributionGraph>
               )}
 
